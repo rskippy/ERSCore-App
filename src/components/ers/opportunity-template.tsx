@@ -135,14 +135,11 @@ export function OpportunityHeader({ organizationLabel, reportingPeriod, lastUpda
     <header className="rounded-[32px] border border-[#dcebe6] bg-white p-7 shadow-[0_28px_80px_-40px_rgba(15,34,56,0.35)] sm:p-8 lg:p-9">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto lg:w-1/4 lg:min-w-[18rem]">
-          <span className="inline-flex h-11 w-[260px] shrink-0 items-center justify-center">
-            <Image src="/logo.png" alt="ERS logo" width={260} height={44} className="h-11 w-[260px] object-contain" priority />
+          <span className="inline-flex w-[340px] max-w-full shrink-0 items-center justify-start">
+            <Image src="/logo.png" alt="ERS logo" width={340} height={58} className="h-auto w-full object-contain" priority />
           </span>
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#0f766e]">
-              Equipment Readiness Score™
-            </p>
-            <p className="text-base font-semibold text-[#0f2238]">Opportunity Detail</p>
+            <p className="text-base font-semibold text-[#0f2238]">Executive Intelligence</p>
           </div>
         </div>
 

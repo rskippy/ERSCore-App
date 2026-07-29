@@ -8,6 +8,8 @@ import { createScenarioSignalBundle } from "./selectors";
 import { toErsInput } from "./adapter";
 import { validateScenarioPatch } from "./validation";
 
+let persistedScenarioInput: ScenarioInput = { ...defaultScenarioInput };
+
 type ScenarioStoreValue = {
   scenarioInput: ScenarioInput;
   updateScenarioInput: (patch: Partial<ScenarioInput>) => { accepted: boolean; error?: string };
@@ -18,10 +20,10 @@ type ScenarioStoreValue = {
 const ScenarioStoreContext = createContext<ScenarioStoreValue | undefined>(undefined);
 
 export function ScenarioStoreProvider({ children }: { children: ReactNode }) {
-  const [scenarioInput, setScenarioInput] = useState<ScenarioInput>(defaultScenarioInput);
+  const [scenarioInput, setScenarioInput] = useState<ScenarioInput>(persistedScenarioInput);
 
   function updateScenarioInput(patch: Partial<ScenarioInput>) {
-    const validation = validateScenarioPatch(scenarioInput, patch);
+    const validation = validateScenarioPatch(persistedScenarioInput, patch);
 
     if (!validation.isValid) {
       return {
@@ -30,10 +32,16 @@ export function ScenarioStoreProvider({ children }: { children: ReactNode }) {
       };
     }
 
-    setScenarioInput((current) => ({
-      ...current,
-      ...patch,
-    }));
+    setScenarioInput((current) => {
+      const next = {
+        ...current,
+        ...patch,
+      };
+
+      persistedScenarioInput = next;
+
+      return next;
+    });
 
     return {
       accepted: true,
@@ -41,7 +49,8 @@ export function ScenarioStoreProvider({ children }: { children: ReactNode }) {
   }
 
   function resetScenarioInput() {
-    setScenarioInput(defaultScenarioInput);
+    persistedScenarioInput = { ...defaultScenarioInput };
+    setScenarioInput(persistedScenarioInput);
   }
 
   const ersSignalBundle = useMemo(() => createScenarioSignalBundle(scenarioInput), [scenarioInput]);
@@ -71,4 +80,8 @@ export function useScenarioStore(): ScenarioStoreValue {
 
 export function getDefaultErsInput() {
   return toErsInput(defaultScenarioInput);
+}
+
+export function resetScenarioStoreForTests() {
+  persistedScenarioInput = { ...defaultScenarioInput };
 }

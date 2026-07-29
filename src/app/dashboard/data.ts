@@ -145,6 +145,65 @@ function createExecutiveSummary(overallScore: number, issue: ReadinessDriver): s
   );
 }
 
+function createOpportunityContent(
+  signalName: DashboardSignalName,
+  scenarioInput: ScenarioInput,
+): {
+  primaryDriver: string;
+  supportingDriver: string;
+  recommendedAction: string;
+  statement: string;
+  buttonLabel: string;
+} {
+  switch (signalName) {
+    case "Detection": {
+      const memberReportingAvailability = scenarioInput.memberReportingAvailable
+        ? "available"
+        : "not available";
+
+      return {
+        primaryDriver: `${scenarioInput.workOrdersStarted} equipment work orders were started in the current reporting period.`,
+        supportingDriver: `${scenarioInput.preventiveMaintenanceTouches} preventive maintenance touches were completed, and member reporting is ${memberReportingAvailability}.`,
+        recommendedAction:
+          "Increase early issue identification by improving preventive maintenance follow-through and member reporting adoption.",
+        statement:
+          "Lower issue-identification activity is creating the largest current readiness penalty and the clearest path to near-term gain.",
+        buttonLabel: "View Detection Opportunity",
+      };
+    }
+    case "Average Recovery":
+      return {
+        primaryDriver: `${scenarioInput.averageDaysToClose} average days are required to close completed equipment work orders.`,
+        supportingDriver: `${scenarioInput.completedEquipmentWorkOrders} completed equipment work orders are included in the current recovery cycle.`,
+        recommendedAction:
+          "Review the longest-cycle completed repairs in the source CMMS and remove approval, parts, or scheduling delays that extend closure time.",
+        statement:
+          "Longer repair closure cycles are creating the largest current readiness penalty and the clearest path to near-term gain.",
+        buttonLabel: "View Average Recovery Opportunity",
+      };
+    case "Repair Drag":
+      return {
+        primaryDriver: `${scenarioInput.olderThan15Days} of ${scenarioInput.totalOpenEquipmentWorkOrders} open equipment work orders are older than 15 days.`,
+        supportingDriver: `${scenarioInput.olderThan30Days} work orders are older than 30 days.`,
+        recommendedAction:
+          "Review the oldest contributing work orders in the source CMMS and prioritize those with approval, parts, or scheduling delays.",
+        statement:
+          "Aging unresolved work is creating the largest current readiness penalty and the clearest path to near-term gain.",
+        buttonLabel: "View Repair Drag Opportunity",
+      };
+    case "Repair Durability":
+      return {
+        primaryDriver: `${scenarioInput.assetsWith3PlusRepairs} monitored assets have 3 or more repairs in the last 90 days.`,
+        supportingDriver: `${scenarioInput.totalMonitoredAssets} total monitored assets are included in this repeat-repair rate.`,
+        recommendedAction:
+          "Prioritize recurring-failure assets for root-cause correction and validate durable fixes before returning them to normal service.",
+        statement:
+          "Repeat repair activity is creating the largest current readiness penalty and the clearest path to near-term gain.",
+        buttonLabel: "View Repair Durability Opportunity",
+      };
+  }
+}
+
 export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput: ScenarioInput) {
   const ersResult = calculateERS(bundle.input);
   const scores = getSignalScores(bundle);
@@ -203,6 +262,10 @@ export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput:
   );
 
   const executiveSummary = createExecutiveSummary(ersResult.finalERS, greatestOpportunitySignal);
+  const opportunityContent = createOpportunityContent(
+    greatestOpportunitySignal.signalName,
+    scenarioInput,
+  );
 
   return {
     organizationLabel: bundle.reportingContext.organizationLabel,
@@ -219,15 +282,13 @@ export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput:
       signalName: greatestOpportunitySignal.signalName,
       currentSignalScore: greatestOpportunitySignal.score,
       status: greatestOpportunitySignal.status,
-      primaryDriver: `${scenarioInput.olderThan15Days} of ${scenarioInput.totalOpenEquipmentWorkOrders} open equipment work orders are older than 15 days.`,
-      supportingDriver: `${scenarioInput.olderThan30Days} work orders are older than 30 days.`,
+      primaryDriver: opportunityContent.primaryDriver,
+      supportingDriver: opportunityContent.supportingDriver,
       remainingErsOpportunity: formatRemainingErsOpportunity(remainingErsOpportunityValue),
-      recommendedAction:
-        "Review the oldest contributing work orders in the source CMMS and prioritize those with approval, parts, or scheduling delays.",
+      recommendedAction: opportunityContent.recommendedAction,
       improvement: formatPoints(greatestOpportunitySignal.potentialGain),
-      statement:
-        "Aging unresolved work is creating the largest current readiness penalty and the clearest path to near-term gain.",
-      buttonLabel: "View Repair Drag Opportunity",
+      statement: opportunityContent.statement,
+      buttonLabel: opportunityContent.buttonLabel,
     },
     drivers: [
       {
@@ -237,6 +298,7 @@ export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput:
         trend: bundle.signals.detection.trend,
         explanation: "Preventive maintenance and member reporting are supporting early issue detection.",
         href: "/opportunities/detection",
+        isGreatestOpportunity: greatestOpportunitySignal.signalName === "Detection",
         opportunity: `Potential ${formatPoints(gains.detection)}`,
       },
       {
@@ -246,6 +308,7 @@ export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput:
         trend: bundle.signals.averageRecovery.trend,
         explanation: "Most completed equipment repairs are being resolved within the expected recovery period.",
         href: "/opportunities/average-recovery",
+        isGreatestOpportunity: greatestOpportunitySignal.signalName === "Average Recovery",
         opportunity: `Potential ${formatPoints(gains.averageRecovery)}`,
       },
       {
@@ -255,7 +318,7 @@ export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput:
         trend: bundle.signals.repairDrag.trend,
         explanation: "Aging open work orders are creating the largest current readiness penalty.",
         href: "/opportunities/repair-drag",
-        isGreatestOpportunity: true,
+        isGreatestOpportunity: greatestOpportunitySignal.signalName === "Repair Drag",
         opportunity: `Potential ${formatPoints(gains.repairDrag)}`,
       },
       {
@@ -266,6 +329,7 @@ export function createDashboardViewModel(bundle: ERSSignalBundle, scenarioInput:
         explanation:
           "Repeat repairs are indicating durability concerns that may be shortening asset life and increasing readiness risk.",
         href: "/opportunities/repair-durability",
+        isGreatestOpportunity: greatestOpportunitySignal.signalName === "Repair Durability",
         opportunity: `Potential ${formatPoints(gains.repairDurability)}`,
       },
     ],

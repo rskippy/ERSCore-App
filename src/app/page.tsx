@@ -5,10 +5,10 @@ export default function Home() {
     <main className="min-h-screen bg-[#f7fcfa] text-[#0f2238]">
       <section className="mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-6 py-8 sm:px-8 lg:px-12">
         <header className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-[#0f2238]">
-          <span className="inline-flex h-11 w-[260px] shrink-0 items-center justify-center">
-            <Image src="/logo.png" alt="ERS logo" width={260} height={44} className="h-11 w-[260px] object-contain" priority />
+          <span className="inline-flex w-[340px] max-w-full shrink-0 items-center justify-start">
+            <Image src="/logo.png" alt="ERS logo" width={340} height={58} className="h-auto w-full object-contain" priority />
           </span>
-          <span className="text-lg font-semibold">Equipment Readiness Score™</span>
+          <span className="text-lg font-semibold">Executive Intelligence</span>
         </header>
 
         <div className="flex flex-1 items-center justify-center py-10 sm:py-16">

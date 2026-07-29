@@ -57,19 +57,19 @@ export default function AverageRecoveryOpportunityPage() {
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Current Signal Score</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{dashboardSignalSnapshot.currentScore}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Remaining ERS Opportunity</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{remainingErsOpportunity}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Average Days to Close</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{averageDaysToClose}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Completed Work Orders</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{completedWorkOrders}</p>
             </div>
@@ -100,7 +100,7 @@ export default function AverageRecoveryOpportunityPage() {
             <button
               type="button"
               onClick={() => setShowSupportingWorkOrders((value) => !value)}
-              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
             >
               {showSupportingWorkOrders
                 ? "Hide Supporting Work Orders"
@@ -124,7 +124,7 @@ export default function AverageRecoveryOpportunityPage() {
               {filters.map((filter) => (
                 <label key={filter.label} className="flex flex-col gap-2 text-sm font-semibold text-[#0f2238]">
                   <span>{filter.label}</span>
-                  <select className="rounded-full border border-[#dcebe6] bg-white px-4 py-3 text-sm font-medium text-[#4f627d] outline-none ring-0 focus:border-[#0f766e]">
+                  <select className="rounded-full border border-[#dcebe6] bg-white px-4 py-3 text-sm font-medium text-[#4f627d] outline-none ring-0 transition focus:border-[#0f766e]">
                     {filter.options.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -135,7 +135,7 @@ export default function AverageRecoveryOpportunityPage() {
               ))}
             </div>
 
-            <div className="mt-6 overflow-x-auto">
+            <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dcebe6] bg-white">
               <table className="min-w-full border-collapse text-left text-sm text-[#0f2238]">
                 <thead>
                   <tr className="border-b border-[#dcebe6] bg-[#f7fcfa] text-xs font-semibold uppercase tracking-[0.24em] text-[#4f627d]">
@@ -152,7 +152,7 @@ export default function AverageRecoveryOpportunityPage() {
                   {[...opportunityRows]
                     .sort((left, right) => right.daysToClose - left.daysToClose)
                     .map((row) => (
-                      <tr key={row.sourceWorkOrderId} className="border-b border-[#eef6f2] align-top">
+                      <tr key={row.sourceWorkOrderId} className="border-b border-[#eef6f2] align-top transition hover:bg-[#f9fdfb]">
                         <td className="px-4 py-4 font-semibold text-[#0f2238]">{row.sourceWorkOrderId}</td>
                         <td className="px-4 py-4 text-[#4f627d]">{row.asset}</td>
                         <td className="px-4 py-4 text-[#4f627d]">{row.location}</td>

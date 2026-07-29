@@ -97,7 +97,7 @@ export default function RepairDragWorkOrdersPage() {
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {workOrdersSummary.metrics.map((metric) => (
-              <div key={metric.label} className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+              <div key={metric.label} className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">
                   {metric.label}
                 </p>
@@ -121,7 +121,7 @@ export default function RepairDragWorkOrdersPage() {
             <button
               type="button"
               onClick={() => setShowAgingWorkOrders((value) => !value)}
-              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
             >
               {showAgingWorkOrders
                 ? "Hide Aging Work Orders"
@@ -145,7 +145,7 @@ export default function RepairDragWorkOrdersPage() {
                   <button
                     key={filter.id}
                     type="button"
-                    className="rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-4 py-2 text-sm font-semibold text-[#4f627d] transition hover:border-[#0f766e] hover:text-[#0f2238]"
+                    className="rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-4 py-2 text-sm font-semibold text-[#4f627d] transition hover:border-[#0f766e] hover:bg-white hover:text-[#0f2238] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30"
                   >
                     {filter.label}
                   </button>
@@ -153,7 +153,7 @@ export default function RepairDragWorkOrdersPage() {
               </div>
             </div>
 
-            <div className="mt-6 overflow-x-auto">
+            <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dcebe6] bg-white">
               <table className="min-w-full border-collapse text-left text-sm text-[#0f2238]">
                 <thead>
                   <tr className="border-b border-[#dcebe6] bg-[#f7fcfa] text-xs font-semibold uppercase tracking-[0.24em] text-[#4f627d]">
@@ -168,7 +168,7 @@ export default function RepairDragWorkOrdersPage() {
                 </thead>
                 <tbody>
                   {sortedWorkOrders.map((workOrder) => (
-                    <tr key={workOrder.equipment} className="border-b border-[#eef6f2] align-top">
+                    <tr key={workOrder.equipment} className="border-b border-[#eef6f2] align-top transition hover:bg-[#f9fdfb]">
                       <td className="px-4 py-4 font-semibold text-[#0f2238]">{workOrder.ageLabel}</td>
                       <td className="px-4 py-4 text-[#4f627d]">{workOrder.location}</td>
                       <td className="px-4 py-4 font-semibold text-[#0f2238]">{workOrder.equipment}</td>

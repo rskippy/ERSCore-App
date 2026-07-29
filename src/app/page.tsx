@@ -27,14 +27,14 @@ export default function Home() {
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
                   <a
                     href="/dashboard"
-                    className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-8 py-3.5 text-base font-semibold text-white transition hover:bg-[#15803d]"
+                    className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-8 py-3.5 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
                   >
                     Enter Platform
                   </a>
                 </div>
               </div>
 
-              <div className="w-full max-w-md rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-8 text-left">
+              <div className="w-full max-w-md rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-8 text-left shadow-[0_16px_40px_-34px_rgba(15,34,56,0.3)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#0f766e]">ERS</p>
                 <h2 className="mt-4 text-3xl font-semibold text-[#0f2238] sm:text-4xl">
                   Equipment Readiness Score™

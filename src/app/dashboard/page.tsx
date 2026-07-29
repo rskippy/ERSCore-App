@@ -41,7 +41,7 @@ function DriverCard({
             dotClass: "bg-[#0f2238]",
           };
 
-  const cardClasses = `rounded-[24px] border p-5 transition hover:border-[#0f766e] hover:shadow-[0_16px_40px_-28px_rgba(15,34,56,0.28)] ${
+  const cardClasses = `rounded-[24px] border p-5 transition hover:-translate-y-0.5 hover:border-[#0f766e] hover:shadow-[0_20px_44px_-30px_rgba(15,34,56,0.3)] ${
     isGreatestOpportunity
       ? "border-[#0f766e] bg-[#f2fbf8] shadow-[0_16px_40px_-28px_rgba(15,34,56,0.28)]"
       : "border-[#dcebe6] bg-[#f7fcfa]"
@@ -84,7 +84,7 @@ function DriverCard({
 
   if (href) {
     return (
-      <Link href={href} className="block">
+      <Link href={href} className="block rounded-[24px] outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35">
         {content}
       </Link>
     );
@@ -125,7 +125,7 @@ export default function DashboardPage() {
 
   return (
     <main className="bg-[#f7fcfa] text-[#0f2238]">
-      <section className="mx-auto flex max-w-7xl flex-col px-6 py-5 sm:px-8 lg:px-12">
+      <section className="mx-auto flex max-w-7xl flex-col px-6 py-6 sm:px-8 lg:px-12">
         <header className="flex flex-wrap items-center justify-between gap-4 rounded-full border border-[#dcebe6] bg-white/90 px-4 py-3 shadow-[0_18px_55px_-32px_rgba(15,34,56,0.4)] backdrop-blur">
           <div className="flex w-full min-w-0 items-center gap-2 sm:w-auto lg:w-1/4 lg:min-w-[18rem]">
             <span className="inline-flex w-[340px] max-w-full shrink-0 items-center justify-start">
@@ -143,7 +143,7 @@ export default function DashboardPage() {
             </div>
             <Link
               href="/scenario-builder"
-              className="rounded-full border border-[#0f766e] bg-[#f2fbf8] px-4 py-2 font-semibold text-[#0f766e] transition hover:bg-[#e8f7f1]"
+              className="rounded-full border border-[#0f766e] bg-[#f2fbf8] px-4 py-2 font-semibold text-[#0f766e] transition hover:bg-[#e8f7f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30"
             >
               Scenario Builder
             </Link>
@@ -202,7 +202,7 @@ export default function DashboardPage() {
                       <Link
                         key={driver.signalName}
                         href={opportunityHrefMap[driver.signalName] ?? "/dashboard"}
-                        className="block cursor-pointer"
+                        className="block cursor-pointer rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/35"
                       >
                         <div className="grid grid-cols-[1.5fr_0.6fr_0.9fr] items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-[#edf8f5] transition hover:bg-white/10 hover:border-white/20">
                           <p className="font-semibold">{driver.signalName}</p>
@@ -229,7 +229,7 @@ export default function DashboardPage() {
           </section>
 
           <Link href={opportunityHref} className="block rounded-[32px] outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7fcfa]">
-          <aside className="rounded-[32px] border border-[#dcebe6] bg-white p-6 shadow-[0_25px_70px_-38px_rgba(15,34,56,0.3)] transition hover:border-[#0f766e] sm:p-7">
+          <aside className="rounded-[32px] border border-[#dcebe6] bg-white p-6 shadow-[0_25px_70px_-38px_rgba(15,34,56,0.3)] transition hover:-translate-y-0.5 hover:border-[#0f766e] hover:shadow-[0_32px_78px_-42px_rgba(15,34,56,0.36)] sm:p-7">
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
                 {opportunity.title}

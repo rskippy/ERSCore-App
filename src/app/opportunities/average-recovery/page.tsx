@@ -50,7 +50,7 @@ export default function AverageRecoveryOpportunityPage() {
               <h3 className="text-xl font-semibold text-[#0f2238]">Recovery Performance</h3>
             </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-6">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-6 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.24)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Average Days to Close</p>
                 <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{analysisViewModel.averageDaysToClose}</p>
               </div>
@@ -59,9 +59,9 @@ export default function AverageRecoveryOpportunityPage() {
 
           <Link
             href="/opportunities/average-recovery/work-orders"
-            className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+            className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
           >
-            🟢 Open Average Recovery Opportunity
+            Open Average Recovery Opportunity
           </Link>
         </div>
       )}

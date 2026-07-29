@@ -79,23 +79,23 @@ export default function DetectionOpportunityWorkOrdersPage() {
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Current Signal Score</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{detectionSignal.score}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Remaining ERS Opportunity</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{remainingErsOpportunity}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Work Orders Started (90 Days)</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{workOrdersStarted}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Preventive Maintenance Touches (90 Days)</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{pmTouches}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Member Reporting Availability</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{memberReportingAvailability}</p>
             </div>
@@ -118,7 +118,7 @@ export default function DetectionOpportunityWorkOrdersPage() {
             <button
               type="button"
               onClick={() => setShowDetectionEvidence((value) => !value)}
-              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
             >
               {showDetectionEvidence ? "Hide Detection Evidence" : "View Detection Evidence"}
             </button>
@@ -137,30 +137,30 @@ export default function DetectionOpportunityWorkOrdersPage() {
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Work Orders Started (90 Days)</p>
                 <p className="mt-3 text-2xl font-semibold text-[#0f2238]">{workOrdersStarted}</p>
               </div>
-              <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Preventive Maintenance Touches (90 Days)</p>
                 <p className="mt-3 text-2xl font-semibold text-[#0f2238]">{pmTouches}</p>
               </div>
-              <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Member Reporting Availability</p>
                 <p className="mt-3 text-2xl font-semibold text-[#0f2238]">{memberReportingAvailability}</p>
               </div>
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-5">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-5 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.22)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Work Orders Driver Score</p>
                 <p className="mt-3 text-2xl font-semibold text-[#0f2238]">{formatScore(workOrdersStartedScore)}</p>
               </div>
-              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-5">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-5 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.22)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">PM Completion Driver Score</p>
                 <p className="mt-3 text-2xl font-semibold text-[#0f2238]">{formatScore(pmCoverageScore)}</p>
               </div>
-              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-5">
+              <div className="rounded-[24px] border border-[#dcebe6] bg-white p-5 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.22)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Member Reporting Driver Score</p>
                 <p className="mt-3 text-2xl font-semibold text-[#0f2238]">{formatScore(memberReportingScore)}</p>
               </div>

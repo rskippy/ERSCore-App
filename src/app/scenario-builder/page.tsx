@@ -40,7 +40,7 @@ function Field({
         max={max}
         step={step}
         onChange={(event) => onChange(event.target.value)}
-        className="rounded-2xl border border-[#0f766e] bg-[#f2fbf8] px-4 py-3 text-base font-semibold text-[#0f2238] outline-none focus:ring-2 focus:ring-[#0f766e]/30"
+        className="rounded-2xl border border-[#0f766e] bg-[#f2fbf8] px-4 py-3 text-base font-semibold text-[#0f2238] outline-none transition focus:border-[#0c5f58] focus:ring-2 focus:ring-[#0f766e]/30"
       />
     </label>
   );
@@ -159,7 +159,7 @@ export default function ScenarioBuilderPage() {
             </div>
             <Link
               href="/dashboard"
-              className="inline-flex items-center justify-center rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-5 py-2.5 text-sm font-semibold text-[#0f2238] transition hover:border-[#0f766e] hover:text-[#0f766e]"
+              className="inline-flex items-center justify-center rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-5 py-2.5 text-sm font-semibold text-[#0f2238] transition hover:border-[#0f766e] hover:bg-white hover:text-[#0f766e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30"
             >
               Back to Dashboard
             </Link>
@@ -172,7 +172,7 @@ export default function ScenarioBuilderPage() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
           <section className="space-y-5">
-            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)]">
+            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)] transition hover:shadow-[0_24px_64px_-40px_rgba(15,34,56,0.3)]">
               <h2 className="text-xl font-semibold text-[#0f2238]">Detection</h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Field
@@ -190,7 +190,7 @@ export default function ScenarioBuilderPage() {
                   <select
                     value={scenarioInput.memberReportingAvailable ? "available" : "not-available"}
                     onChange={(event) => commitMemberReporting(event.target.value === "available")}
-                    className="rounded-2xl border border-[#0f766e] bg-[#f2fbf8] px-4 py-3 text-base font-semibold text-[#0f2238] outline-none focus:ring-2 focus:ring-[#0f766e]/30"
+                    className="rounded-2xl border border-[#0f766e] bg-[#f2fbf8] px-4 py-3 text-base font-semibold text-[#0f2238] outline-none transition focus:border-[#0c5f58] focus:ring-2 focus:ring-[#0f766e]/30"
                   >
                     <option value="available">Available</option>
                     <option value="not-available">Not Available</option>
@@ -199,7 +199,7 @@ export default function ScenarioBuilderPage() {
               </div>
             </article>
 
-            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)]">
+            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)] transition hover:shadow-[0_24px_64px_-40px_rgba(15,34,56,0.3)]">
               <h2 className="text-xl font-semibold text-[#0f2238]">Average Recovery</h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Field
@@ -216,7 +216,7 @@ export default function ScenarioBuilderPage() {
               </div>
             </article>
 
-            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)]">
+            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)] transition hover:shadow-[0_24px_64px_-40px_rgba(15,34,56,0.3)]">
               <h2 className="text-xl font-semibold text-[#0f2238]">Repair Drag</h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Field
@@ -245,7 +245,7 @@ export default function ScenarioBuilderPage() {
               </div>
             </article>
 
-            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)]">
+            <article className="rounded-[28px] border border-[#dcebe6] bg-white p-6 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)] transition hover:shadow-[0_24px_64px_-40px_rgba(15,34,56,0.3)]">
               <h2 className="text-xl font-semibold text-[#0f2238]">Repair Durability</h2>
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <Field
@@ -269,7 +269,7 @@ export default function ScenarioBuilderPage() {
                   resetScenarioInput();
                   setValidationMessage(null);
                 }}
-                className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+                className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
               >
                 Reset Sample Data
               </button>

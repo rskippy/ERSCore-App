@@ -56,19 +56,19 @@ export default function RepairDurabilityOpportunityWorkOrdersPage() {
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Current Signal Score</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{repairDurabilitySignal.score}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Remaining ERS Opportunity</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{remainingErsOpportunity}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Assets with 3+ Repairs</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{repeatRepairAssets}</p>
             </div>
-            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+            <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Repeat Failure Rate</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{repeatRepairShare}%</p>
             </div>
@@ -91,7 +91,7 @@ export default function RepairDurabilityOpportunityWorkOrdersPage() {
             <button
               type="button"
               onClick={() => setShowSupportingAssets((value) => !value)}
-              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+              className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
             >
               {showSupportingAssets
                 ? "Hide Supporting Assets"
@@ -111,7 +111,7 @@ export default function RepairDurabilityOpportunityWorkOrdersPage() {
               </div>
             </div>
 
-            <div className="mt-6 overflow-x-auto">
+            <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dcebe6] bg-white">
               <table className="min-w-full border-collapse text-left text-sm text-[#0f2238]">
                 <thead>
                   <tr className="border-b border-[#dcebe6] bg-[#f7fcfa] text-xs font-semibold uppercase tracking-[0.24em] text-[#4f627d]">
@@ -124,7 +124,7 @@ export default function RepairDurabilityOpportunityWorkOrdersPage() {
                 </thead>
                 <tbody>
                   {supportingAssets.map((asset) => (
-                    <tr key={`${asset.asset}-${asset.location}`} className="border-b border-[#eef6f2] align-top">
+                    <tr key={`${asset.asset}-${asset.location}`} className="border-b border-[#eef6f2] align-top transition hover:bg-[#f9fdfb]">
                       <td className="px-4 py-4 font-semibold text-[#0f2238]">{asset.asset}</td>
                       <td className="px-4 py-4 text-[#4f627d]">{asset.location}</td>
                       <td className="px-4 py-4 text-[#4f627d]">{asset.repairCount}</td>

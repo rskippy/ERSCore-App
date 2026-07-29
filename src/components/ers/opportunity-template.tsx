@@ -145,7 +145,7 @@ export function OpportunityHeader({ organizationLabel, reportingPeriod, lastUpda
 
         <Link
           href={backHref}
-          className="inline-flex items-center rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-4 py-2 text-sm font-semibold text-[#0f2238] transition hover:border-[#0f766e] hover:text-[#0f766e]"
+          className="inline-flex items-center rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-4 py-2 text-sm font-semibold text-[#0f2238] transition hover:border-[#0f766e] hover:bg-white hover:text-[#0f766e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30"
         >
           {backLabel}
         </Link>
@@ -178,18 +178,18 @@ export function ScoreSummary({ sectionLabel, title, priority, improvement, curre
           </div>
         </div>
 
-        <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5">
+        <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 shadow-[0_12px_30px_-28px_rgba(15,34,56,0.32)]">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Potential improvement</p>
           <p className="mt-2 text-2xl font-semibold text-[#0f2238]">{improvement}</p>
         </div>
       </div>
 
       <div className="mt-8 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
-        <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-6">
+        <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-6 shadow-[0_12px_30px_-28px_rgba(15,34,56,0.32)]">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">{scoreLabel}</p>
           <p className="mt-3 text-4xl font-semibold text-[#0f2238]">{currentScore}</p>
         </div>
-        <div className="rounded-[24px] border border-[#c8e8de] bg-[#f2fbf8] p-6">
+        <div className="rounded-[24px] border border-[#c8e8de] bg-[#f2fbf8] p-6 shadow-[0_12px_30px_-28px_rgba(15,34,56,0.26)]">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0f766e]">Supporting statement</p>
           <p className="mt-3 text-lg leading-8 text-[#0f2238]">{statement}</p>
         </div>
@@ -223,7 +223,7 @@ export function ScoreInputs({ title, description, metrics }: ScoreInputsProps) {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {metrics.map((metric) => (
-          <div key={metric.label} className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-6">
+          <div key={metric.label} className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-6 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.26)]">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">{metric.label}</p>
             <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{metric.value}</p>
             {metric.description ? (
@@ -242,7 +242,7 @@ export function SupportingMetrics({ title, metrics }: SupportingMetricsProps) {
       <h2 className="text-xl font-semibold text-[#0f2238]">{title}</h2>
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         {metrics.map((metric) => (
-          <div key={metric.label} className="rounded-[18px] border border-[#dcebe6] bg-white p-4">
+          <div key={metric.label} className="rounded-[18px] border border-[#dcebe6] bg-white p-4 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.22)]">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#4f627d]">{metric.label}</p>
             <p className="mt-2 text-2xl font-semibold text-[#0f2238]">{metric.value}</p>
           </div>
@@ -258,7 +258,7 @@ export function Recommendation({ title, items, ctaLabel, ctaHref }: Recommendati
       <h2 className="text-xl font-semibold text-[#0f2238]">{title}</h2>
       <ol className="mt-6 space-y-4">
         {items.map((action, index) => (
-          <li key={action} className="flex gap-3 rounded-[20px] border border-[#dcebe6] bg-[#f7fcfa] p-4">
+          <li key={action} className="flex gap-3 rounded-[20px] border border-[#dcebe6] bg-[#f7fcfa] p-4 transition hover:border-[#c8e8de] hover:bg-white">
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0f766e] text-sm font-semibold text-white">
               {index + 1}
             </span>
@@ -269,7 +269,7 @@ export function Recommendation({ title, items, ctaLabel, ctaHref }: Recommendati
 
       <Link
         href={ctaHref}
-        className="mt-8 inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d]"
+        className="mt-8 inline-flex items-center justify-center rounded-full bg-[#16a34a] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
       >
         {ctaLabel}
       </Link>
@@ -300,7 +300,7 @@ export function ContributingRecordsTable({ title, description, informationalMess
         {informationalMessage}
       </div>
 
-      <div className="mt-6 overflow-x-auto">
+      <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dcebe6] bg-white">
         <table className="min-w-full border-collapse text-left text-sm text-[#0f2238]">
           <thead>
             <tr className="border-b border-[#dcebe6] bg-[#f7fcfa] text-xs font-semibold uppercase tracking-[0.24em] text-[#4f627d]">
@@ -313,7 +313,7 @@ export function ContributingRecordsTable({ title, description, informationalMess
           </thead>
           <tbody>
             {rows.map((row, index) => (
-              <tr key={`${row.location ?? "row"}-${index}`} className="border-b border-[#eef6f2] align-top">
+              <tr key={`${row.location ?? "row"}-${index}`} className="border-b border-[#eef6f2] align-top transition hover:bg-[#f9fdfb]">
                 {columns.map((column) => {
                   const cellValue = row[column.key];
                   const isStatusColumn = column.key.toLowerCase().includes("status");
@@ -414,7 +414,7 @@ export function ExecutiveFirstOpportunityLayout({
 
         <section className="mt-6 rounded-[32px] border border-[#dcebe6] bg-white p-8 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)] sm:p-9">
           <h2 className="text-xl font-semibold text-[#0f2238]">Evidence</h2>
-          <div className="mt-6">{evidence}</div>
+          <div className="mt-7">{evidence}</div>
         </section>
 
         {showRecommendedActions && recommendedActions ? (
@@ -448,7 +448,7 @@ export function ExecutiveFirstOpportunityLayout({
             <div className="mt-6 space-y-4">
               {learnMoreSections.map((section) => (
                 <details key={section.title} className="rounded-[20px] border border-[#dcebe6] bg-white p-5">
-                  <summary className="cursor-pointer list-none text-sm font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+                  <summary className="cursor-pointer list-none text-sm font-semibold uppercase tracking-[0.24em] text-[#0f766e] transition hover:text-[#0c5f58]">
                     {section.title}
                   </summary>
                   <div className="mt-4 text-[15px] leading-7 text-[#0f2238]">{section.content}</div>

@@ -11,7 +11,7 @@ import {
 } from "@/lib/ers/remainingOpportunity";
 import { FIXED_NPS } from "@/lib/ers/scenario/defaults";
 import type { ScenarioInput } from "@/lib/ers/scenario/types";
-import { useScenarioStore } from "@/lib/ers/scenario/store";
+import { useScenarioStore, type ScenarioLocation } from "@/lib/ers/scenario/store";
 
 type NumericField = Exclude<keyof ScenarioInput, "memberReportingAvailable">;
 
@@ -47,7 +47,15 @@ function Field({
 }
 
 export default function ScenarioBuilderPage() {
-  const { scenarioInput, updateScenarioInput, resetScenarioInput, ersSignalBundle } = useScenarioStore();
+  const {
+    selectedLocation,
+    locations,
+    scenarioInput,
+    updateScenarioInput,
+    resetScenarioInput,
+    setSelectedLocation,
+    ersSignalBundle,
+  } = useScenarioStore();
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   const ersResult = calculateERS(ersSignalBundle.input);
@@ -163,6 +171,25 @@ export default function ScenarioBuilderPage() {
             >
               Back to Dashboard
             </Link>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-end gap-4 rounded-2xl border border-[#dcebe6] bg-[#f2fbf8] px-4 py-4">
+            <label className="flex min-w-[16rem] flex-col gap-2">
+              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f2238]">Location</span>
+              <select
+                value={selectedLocation}
+                onChange={(event) => setSelectedLocation(event.target.value as ScenarioLocation)}
+                className="rounded-2xl border border-[#0f766e] bg-white px-4 py-3 text-base font-semibold text-[#0f2238] outline-none transition focus:border-[#0c5f58] focus:ring-2 focus:ring-[#0f766e]/30"
+                aria-label="Scenario location"
+              >
+                {locations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="text-sm font-semibold text-[#4f627d]">Editing this builder only affects {selectedLocation}.</p>
           </div>
 
           <div className="mt-6 rounded-2xl border border-[#0f766e] bg-[#f2fbf8] px-4 py-3 text-sm font-semibold text-[#0f766e]">

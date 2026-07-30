@@ -223,20 +223,20 @@ describe("scenario state persistence across navigation", () => {
     expect(document.getElementById("selected-location")?.textContent).toBe("Location 1");
     expect(document.getElementById("active-work-orders")?.textContent).toBe("4");
     expect(document.getElementById("location-1-work-orders")?.textContent).toBe("4");
-    expect(document.getElementById("location-2-work-orders")?.textContent).toBe("4");
+    expect(document.getElementById("location-2-work-orders")?.textContent).toBe("18");
 
     clickById("update-active-work-orders-21");
 
     expect(document.getElementById("active-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("active-input-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("location-1-work-orders")?.textContent).toBe("21");
-    expect(document.getElementById("location-2-work-orders")?.textContent).toBe("4");
+    expect(document.getElementById("location-2-work-orders")?.textContent).toBe("18");
 
     clickById("select-location-2");
 
     expect(document.getElementById("selected-location")?.textContent).toBe("Location 2");
-    expect(document.getElementById("active-work-orders")?.textContent).toBe("4");
-    expect(document.getElementById("active-input-work-orders")?.textContent).toBe("4");
+    expect(document.getElementById("active-work-orders")?.textContent).toBe("18");
+    expect(document.getElementById("active-input-work-orders")?.textContent).toBe("18");
 
     clickById("update-active-work-orders-9");
 
@@ -315,8 +315,8 @@ describe("scenario state persistence across navigation", () => {
     clickById("select-location-2");
 
     expect(document.getElementById("selected-location")?.textContent).toBe("Location 2");
-    expect(document.getElementById("active-work-orders")?.textContent).toBe("4");
-    expect(document.getElementById("active-input-work-orders")?.textContent).toBe("4");
+    expect(document.getElementById("active-work-orders")?.textContent).toBe("18");
+    expect(document.getElementById("active-input-work-orders")?.textContent).toBe("18");
 
     act(() => {
       root.unmount();

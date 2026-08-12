@@ -65,11 +65,11 @@ export default function RepairDurabilityOpportunityWorkOrdersPage() {
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{remainingErsOpportunity}</p>
             </div>
             <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Assets with 3+ Repairs</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Assets with 4+ Repairs</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{repeatRepairAssets}</p>
             </div>
             <div className="rounded-[24px] border border-[#dcebe6] bg-[#f7fcfa] p-5 transition hover:border-[#c8e8de] hover:bg-white">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Repeat Failure Rate</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Repeat-Failure Assets</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{repeatRepairShare}%</p>
             </div>
           </div>

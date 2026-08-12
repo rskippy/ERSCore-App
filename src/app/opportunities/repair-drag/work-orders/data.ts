@@ -1,3 +1,4 @@
+import { getLastUpdatedLabel } from "@/lib/ers/reportingDate";
 import type { ScenarioInput } from "@/lib/ers/scenario/types";
 
 export const workOrderFilters = [
@@ -97,9 +98,9 @@ export const workOrders = [
 export function createRepairDragWorkOrdersViewModel(scenarioInput: ScenarioInput) {
   return {
     workOrdersHeader: {
-      organizationLabel: "All Locations",
+      organizationLabel: "",
       reportingPeriod: "Last 90 Days",
-      lastUpdated: "08:30 ET · 23 Jul 2026",
+      lastUpdated: getLastUpdatedLabel(),
     },
     workOrdersSummary: {
       sectionLabel: "Repair Drag",

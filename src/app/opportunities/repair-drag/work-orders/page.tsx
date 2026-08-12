@@ -72,9 +72,6 @@ export default function RepairDragWorkOrdersPage() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#4f627d]">
-            <div className="rounded-full border border-[#dcebe6] bg-[#f9fdfb] px-4 py-2 font-semibold text-[#0f2238]">
-              {workOrdersHeader.organizationLabel}
-            </div>
             <div className="rounded-full border border-[#dcebe6] bg-white px-4 py-2 font-semibold text-[#0f2238]">
               {workOrdersHeader.reportingPeriod}
             </div>

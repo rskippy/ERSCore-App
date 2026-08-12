@@ -35,6 +35,7 @@ export default function AverageRecoveryOpportunityPage() {
       showEstimatedErsImpact={false}
       showRecommendedActions={false}
       showLearnMore={false}
+      whyItMatters={"Once an equipment issue is identified, every additional day it remains unresolved increases member exposure.\n\nFaster recovery reduces the time members encounter equipment that is unavailable or not performing as expected."}
       signalHeader={{
         signalName: summary.title,
         currentScore: analysisViewModel.currentScore,

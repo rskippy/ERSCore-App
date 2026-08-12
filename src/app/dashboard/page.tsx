@@ -2,8 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { getReadinessStatus, getReadinessStatusBadgeClasses, getReadinessStatusCardClasses } from "@/lib/ers/readinessStatus";
+import { useMemo } from "react";
+
+import { getReadinessStatus, getReadinessStatusBadgeClasses, getReadinessStatusCardClasses, getDriverStatusLabel } from "@/lib/ers/readinessStatus";
 import { useScenarioStore } from "@/lib/ers/scenario/store";
+import { useDemoScope } from "@/lib/ers/demo-scope/store";
+import { calculateERS } from "@/lib/ers/scoreEngine";
+import { toErsInput } from "@/lib/ers/scenario/adapter";
 import { createDashboardViewModel } from "./data";
 
 function DriverCard({
@@ -94,7 +99,11 @@ function DriverCard({
 }
 
 export default function DashboardPage() {
-  const { ersSignalBundle, scenarioInput } = useScenarioStore();
+  const { ersSignalBundle, scenarioInput, locations, selectedLocation, locationScenarioInputs } = useScenarioStore();
+  const { role, getVisibleLocations } = useDemoScope();
+
+  // Demo-only: for Manager role, only show their assigned single location
+  const visibleLocations = getVisibleLocations(locations);
   const dashboardViewModel = createDashboardViewModel(ersSignalBundle, scenarioInput);
 
   const {
@@ -109,6 +118,23 @@ export default function DashboardPage() {
     executiveSummary,
     readinessDrivers,
   } = dashboardViewModel;
+
+  // Top location ERS across the current org scope — live-calculated from all visible locations.
+  const { topLocationErs, topLocationDelta } = useMemo(() => {
+    const scores = visibleLocations.map((loc) => {
+      const input = locationScenarioInputs[loc];
+      if (!input) return 0;
+      return calculateERS(toErsInput(input)).finalERS;
+    });
+    const top = scores.length > 0 ? Math.max(...scores) : overallScore;
+    return {
+      topLocationErs: Math.round(top * 10) / 10,
+      topLocationDelta: Math.round((top - overallScore) * 10) / 10,
+    };
+  }, [visibleLocations, locationScenarioInputs, overallScore]);
+
+  // Demo-only: adjust label for current location
+  const displayLabel = selectedLocation;
 
   const opportunityHrefMap: Record<string, string> = {
     Detection: "/opportunities/detection",
@@ -139,14 +165,8 @@ export default function DashboardPage() {
           <div className="flex flex-wrap items-center gap-3 text-sm text-[#4f627d] lg:flex-1 lg:justify-end">
             <div className="flex items-center gap-2 rounded-full border border-[#dcebe6] bg-[#f9fdfb] px-4 py-2 font-semibold text-[#0f2238]">
               <span className="text-[#0f766e]">◉</span>
-              <span>{organizationLabel}</span>
+              <span>{displayLabel}</span>
             </div>
-            <Link
-              href="/scenario-builder"
-              className="rounded-full border border-[#0f766e] bg-[#f2fbf8] px-4 py-2 font-semibold text-[#0f766e] transition hover:bg-[#e8f7f1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30"
-            >
-              Scenario Builder
-            </Link>
             <div className="rounded-full border border-[#dcebe6] bg-white px-4 py-2 font-semibold text-[#0f2238]">
               {reportingPeriod}
             </div>
@@ -172,6 +192,17 @@ export default function DashboardPage() {
                     <p className="text-lg font-semibold text-[#d7f5ea]">{trendValue}</p>
                     <p className="text-sm text-[#8ba8b7]">{trendLabel}</p>
                   </div>
+                </div>
+
+                <div className="mt-3 flex items-center gap-3">
+                  <p className="text-sm text-[#8ba8b7]">
+                    <span className="text-[#d7f5ea]">Top Location ERS: {topLocationErs}</span>
+                    {topLocationDelta <= 0 ? (
+                      <span className="ml-2 text-[#7dd3c0]">· Currently Top Location</span>
+                    ) : (
+                      <span className="ml-2 text-[#8ba8b7]">· {topLocationDelta} points to Top Location</span>
+                    )}
+                  </p>
                 </div>
 
                 <div className="mt-4 rounded-[18px] border border-white/10 bg-[#123447] p-4">
@@ -207,9 +238,9 @@ export default function DashboardPage() {
                         <div className="grid grid-cols-[1.5fr_0.6fr_0.9fr] items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-[#edf8f5] transition hover:bg-white/10 hover:border-white/20">
                           <p className="font-semibold">{driver.signalName}</p>
                           <p className="text-right font-semibold">{driver.score}</p>
-                          <div className="text-right">
-                            <span className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${getReadinessStatusBadgeClasses(getReadinessStatus(driver.score))}`}>
-                              {getReadinessStatus(driver.score)}
+                          <div className="flex justify-end">
+                            <span className={`inline-flex w-[11.5rem] items-center justify-center rounded-full border py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${getReadinessStatusBadgeClasses(getDriverStatusLabel(getReadinessStatus(driver.score)))}`}>
+                              {getDriverStatusLabel(getReadinessStatus(driver.score))}
                             </span>
                           </div>
                         </div>
@@ -254,11 +285,11 @@ export default function DashboardPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Current Signal Score</p>
                   <p className="mt-2 text-lg font-semibold text-[#0f2238]">{opportunity.currentSignalScore}</p>
                 </div>
-                <div className={`rounded-[16px] border p-3 ${getReadinessStatusCardClasses(getReadinessStatus(opportunity.currentSignalScore))}`}>
+                <div className={`rounded-[16px] border p-3 ${getReadinessStatusCardClasses(getDriverStatusLabel(getReadinessStatus(opportunity.currentSignalScore)))}`}>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Status</p>
                   <p className="mt-2 text-lg font-semibold text-[#0f2238]">
-                    <span className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${getReadinessStatusBadgeClasses(getReadinessStatus(opportunity.currentSignalScore))}`}>
-                      {getReadinessStatus(opportunity.currentSignalScore)}
+                    <span className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${getReadinessStatusBadgeClasses(getDriverStatusLabel(getReadinessStatus(opportunity.currentSignalScore)))}`}>
+                      {getDriverStatusLabel(getReadinessStatus(opportunity.currentSignalScore))}
                     </span>
                   </p>
                 </div>

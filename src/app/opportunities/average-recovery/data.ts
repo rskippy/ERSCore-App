@@ -1,3 +1,4 @@
+import { getLastUpdatedLabel } from "@/lib/ers/reportingDate";
 import { calculateAverageRecovery } from "@/lib/ers/averageRecovery";
 import { getReadinessStatus } from "@/lib/ers/readinessStatus";
 import type { ScenarioInput } from "@/lib/ers/scenario/types";
@@ -11,7 +12,10 @@ function getRecoveryStatus(daysToClose: number): string {
     equipmentSpecificReporting: false,
     averageRecoveryDays: daysToClose,
     completedRepairWorkOrders90Days: 0,
-    equipmentWithOpenRepairsOver10Days: 0,
+    totalOpenEquipmentRepairs: 0,
+    equipmentWithOpenRepairsOver15Days: 0,
+    equipmentWithOpenRepairsOver30Days: 0,
+    equipmentWithOpenRepairsOver45Days: 0,
     equipmentWithMoreThan3Repairs90Days: 0,
     nps: 0,
   };
@@ -24,9 +28,9 @@ function getRecoveryStatus(daysToClose: number): string {
 export function createAverageRecoveryOpportunityViewModel(scenarioInput: ScenarioInput) {
   return {
     header: {
-      organizationLabel: "All Locations",
+      organizationLabel: "",
       reportingPeriod: "Last 90 Days",
-      lastUpdated: "08:30 ET · 23 Jul 2026",
+      lastUpdated: getLastUpdatedLabel(),
     },
     summary: {
       title: "Average Recovery",

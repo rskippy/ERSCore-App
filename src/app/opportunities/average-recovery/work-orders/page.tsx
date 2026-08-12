@@ -85,16 +85,14 @@ export default function AverageRecoveryOpportunityPage() {
 
         <section className="mt-6 rounded-[32px] border border-[#dcebe6] bg-white p-8 shadow-[0_20px_60px_-38px_rgba(15,34,56,0.24)] sm:p-9">
           <h2 className="text-xl font-semibold text-[#0f2238]">Recovery Improvement Checklist</h2>
-          <ol className="mt-6 space-y-4">
-            {recommendations.map((recommendation, index) => (
-              <li key={recommendation} className="flex gap-3 rounded-[20px] border border-[#dcebe6] bg-[#f7fcfa] p-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0f766e] text-sm font-semibold text-white">
-                  {index + 1}
-                </span>
+          <ul className="mt-6 space-y-3">
+            {recommendations.map((recommendation) => (
+              <li key={recommendation} className="flex items-start gap-3 rounded-[20px] border border-[#dcebe6] bg-[#f7fcfa] p-4">
+                <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#0f766e]" />
                 <p className="text-base leading-7 text-[#0f2238]">{recommendation}</p>
               </li>
             ))}
-          </ol>
+          </ul>
 
           <div className="mt-6">
             <button

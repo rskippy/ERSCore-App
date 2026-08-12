@@ -29,7 +29,7 @@ export function createAverageRecoveryAnalysisViewModel(
     averageDaysToClose,
     completedEquipmentWorkOrders,
     executiveSummary:
-      `${signal.narrativeInputs.signalName} is ${signal.status.toLowerCase()} with an average closure time of ` +
+      `Average Recovery ${signal.status === "Needs Improvement" ? "needs improvement" : `is ${signal.status.toLowerCase()}`}, with an average closure time of ` +
       `${averageDaysToClose} days across ${completedEquipmentWorkOrders} completed equipment work orders during ${reportingPeriod.toLowerCase()}.`,
   };
 }

@@ -94,7 +94,7 @@ describe("dashboard greatest opportunity content", () => {
       expectedStatement:
         "Repeat repair activity is creating the largest current readiness penalty and the clearest path to near-term gain.",
       expectedButtonLabel: "View Repair Durability Opportunity",
-      expectedPrimaryDriver: `${defaultScenarioInput.assetsWith3PlusRepairs} monitored assets have 3 or more repairs in the last 90 days.`,
+      expectedPrimaryDriver: `${defaultScenarioInput.assetsWith3PlusRepairs} monitored assets have 4 or more repairs in the last 90 days.`,
       expectedSupportingDriver: `${defaultScenarioInput.totalMonitoredAssets} total monitored assets are included in this repeat-repair rate.`,
       expectedRecommendedAction:
         "Prioritize recurring-failure assets for root-cause correction and validate durable fixes before returning them to normal service.",

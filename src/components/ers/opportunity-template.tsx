@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ExecutiveReadinessInsight, type ExecutiveReadinessInsightSection } from "@/components/ers/executive-readiness-insight";
-import { getReadinessStatusBadgeClasses, getReadinessStatusCardClasses } from "@/lib/ers/readinessStatus";
+import { getReadinessStatusBadgeClasses, getReadinessStatusCardClasses, getDriverStatusLabel } from "@/lib/ers/readinessStatus";
 
 export type OpportunityHeaderProps = {
-  organizationLabel: string;
+  organizationLabel?: string;
   reportingPeriod: string;
   lastUpdated: string;
   backHref?: string;
@@ -115,6 +115,7 @@ export type ExecutiveFirstOpportunityLayoutProps = {
   signalHeader: ExecutiveSignalHeader;
   executiveSummary: string;
   evidence: ReactNode;
+  whyItMatters?: string;
   recommendedActions?: {
     title?: string;
     items: string[];
@@ -152,9 +153,11 @@ export function OpportunityHeader({ organizationLabel, reportingPeriod, lastUpda
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#4f627d]">
-        <div className="rounded-full border border-[#dcebe6] bg-[#f9fdfb] px-4 py-2 font-semibold text-[#0f2238]">
-          {organizationLabel}
-        </div>
+        {organizationLabel ? (
+          <div className="rounded-full border border-[#dcebe6] bg-[#f9fdfb] px-4 py-2 font-semibold text-[#0f2238]">
+            {organizationLabel}
+          </div>
+        ) : null}
         <div className="rounded-full border border-[#dcebe6] bg-white px-4 py-2 font-semibold text-[#0f2238]">
           {reportingPeriod}
         </div>
@@ -343,6 +346,7 @@ export function ExecutiveFirstOpportunityLayout({
   signalHeader,
   executiveSummary,
   evidence,
+  whyItMatters,
   recommendedActions,
   learnMoreSections,
   showHeaderLabel = true,
@@ -376,7 +380,7 @@ export function ExecutiveFirstOpportunityLayout({
             </div>
             {showStatusPill ? (
               <div className="inline-flex rounded-full border border-[#dcebe6] bg-[#f7fcfa] px-4 py-2 text-sm font-semibold text-[#0f2238]">
-                Status: <span className={`ml-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] ${getReadinessStatusBadgeClasses(signalHeader.status)}`}>{signalHeader.status}</span>
+                Status: <span className={`ml-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] ${getReadinessStatusBadgeClasses(getDriverStatusLabel(signalHeader.status))}`}>{getDriverStatusLabel(signalHeader.status)}</span>
               </div>
             ) : null}
           </div>
@@ -386,11 +390,11 @@ export function ExecutiveFirstOpportunityLayout({
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Current Score</p>
               <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{signalHeader.currentScore}</p>
             </div>
-            <div className={`rounded-[24px] border p-5 ${getReadinessStatusCardClasses(signalHeader.status)}`}>
+            <div className={`rounded-[24px] border p-5 ${getReadinessStatusCardClasses(getDriverStatusLabel(signalHeader.status))}`}>
               <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Status</p>
               <div className="mt-3">
-                <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${getReadinessStatusBadgeClasses(signalHeader.status)}`}>
-                  {signalHeader.status}
+                <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${getReadinessStatusBadgeClasses(getDriverStatusLabel(signalHeader.status))}`}>
+                  {getDriverStatusLabel(signalHeader.status)}
                 </span>
               </div>
             </div>
@@ -406,6 +410,13 @@ export function ExecutiveFirstOpportunityLayout({
             </div>
           </div>
         </section>
+
+        {whyItMatters ? (
+          <section className="mt-6 rounded-[32px] border border-[#dcebe6] bg-white p-6 sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#0f766e]">Why It Matters</p>
+            <p className="mt-4 whitespace-pre-line text-base leading-7 text-[#4f627d]">{whyItMatters}</p>
+          </section>
+        ) : null}
 
         <section className="mt-6 rounded-[32px] border border-[#dcebe6] bg-[#0f2238] p-8 text-white shadow-[0_20px_60px_-38px_rgba(15,34,56,0.3)] sm:p-9">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-[#7dd3c0]">Executive Summary</h2>

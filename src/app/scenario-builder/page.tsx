@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+
 import { calculateERS } from "@/lib/ers/scoreEngine";
 import { getReadinessStatus, getReadinessStatusBadgeClasses } from "@/lib/ers/readinessStatus";
 import {
@@ -12,6 +13,8 @@ import {
 import { FIXED_NPS } from "@/lib/ers/scenario/defaults";
 import type { ScenarioInput } from "@/lib/ers/scenario/types";
 import { useScenarioStore, type ScenarioLocation } from "@/lib/ers/scenario/store";
+import { useDemoScope } from "@/lib/ers/demo-scope/store";
+import { parseExcelFile } from "@/lib/ers/excelImport";
 
 type NumericField = Exclude<keyof ScenarioInput, "memberReportingAvailable">;
 
@@ -55,8 +58,34 @@ export default function ScenarioBuilderPage() {
     resetScenarioInput,
     setSelectedLocation,
     ersSignalBundle,
+    importLocations,
   } = useScenarioStore();
+  const { role } = useDemoScope();
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
+  const [importStatus, setImportStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Scenario Builder shows all imported locations — scope filtering is for portfolio views only.
+  const visibleLocations = locations;
+
+  async function handleFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    const result = await parseExcelFile(file);
+
+    if (!result.success) {
+      setImportStatus({ type: "error", message: result.error });
+      return;
+    }
+
+    importLocations(result.locations);
+    setImportStatus({
+      type: "success",
+      message: `${result.locations.length} location${result.locations.length === 1 ? "" : "s"} imported. Select a location above to review its inputs and scores.`,
+    });
+  }
 
   const ersResult = calculateERS(ersSignalBundle.input);
 
@@ -174,26 +203,54 @@ export default function ScenarioBuilderPage() {
           </div>
 
           <div className="mt-6 flex flex-wrap items-end gap-4 rounded-2xl border border-[#dcebe6] bg-[#f2fbf8] px-4 py-4">
-            <label className="flex min-w-[16rem] flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f2238]">Location</span>
-              <select
-                value={selectedLocation}
-                onChange={(event) => setSelectedLocation(event.target.value as ScenarioLocation)}
-                className="rounded-2xl border border-[#0f766e] bg-white px-4 py-3 text-base font-semibold text-[#0f2238] outline-none transition focus:border-[#0c5f58] focus:ring-2 focus:ring-[#0f766e]/30"
-                aria-label="Scenario location"
-              >
-                {locations.map((location) => (
-                  <option key={location} value={location}>
-                    {location}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="flex flex-wrap gap-4">
+              <label className="flex min-w-[16rem] flex-col gap-2">
+                <span className="text-xs font-semibold uppercase tracking-[0.24em] text-[#0f2238]">Location</span>
+                <select
+                  value={selectedLocation}
+                  onChange={(event) => setSelectedLocation(event.target.value as ScenarioLocation)}
+                  className="rounded-2xl border border-[#0f766e] bg-white px-4 py-3 text-base font-semibold text-[#0f2238] outline-none transition focus:border-[#0c5f58] focus:ring-2 focus:ring-[#0f766e]/30"
+                  aria-label="Scenario location"
+                >
+                  {visibleLocations.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
             <p className="text-sm font-semibold text-[#4f627d]">Editing this builder only affects {selectedLocation}.</p>
           </div>
 
           <div className="mt-6 rounded-2xl border border-[#0f766e] bg-[#f2fbf8] px-4 py-3 text-sm font-semibold text-[#0f766e]">
             Scenario Data Mode - Changes update the entire ERS application.
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            {role === "Regional" && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="inline-flex items-center justify-center rounded-full border border-[#dcebe6] bg-white px-5 py-2.5 text-sm font-semibold text-[#0f2238] transition hover:border-[#0f766e] hover:bg-[#f2fbf8] hover:text-[#0f766e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/30"
+                >
+                  Import Test Locations
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".xlsx"
+                  className="sr-only"
+                  onChange={handleFileSelect}
+                />
+              </>
+            )}
+            {importStatus ? (
+              <p className={`text-sm font-semibold ${importStatus.type === "error" ? "text-[#b91c1c]" : "text-[#0f766e]"}`}>
+                {importStatus.message}
+              </p>
+            ) : null}
           </div>
         </header>
 
@@ -281,7 +338,7 @@ export default function ScenarioBuilderPage() {
                   onChange={(raw) => commitCountField("totalMonitoredAssets", raw)}
                 />
                 <Field
-                  label="Assets with 3+ Repairs"
+                  label="Assets with 4+ Repairs"
                   value={scenarioInput.assetsWith3PlusRepairs}
                   max={scenarioInput.totalMonitoredAssets}
                   onChange={(raw) => commitCountField("assetsWith3PlusRepairs", raw)}

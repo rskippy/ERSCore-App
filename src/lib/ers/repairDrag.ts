@@ -18,33 +18,53 @@ function interpolate(
   return y1 + ((x - x1) * (y2 - y1)) / (x2 - x1);
 }
 
+// Progressive aging weights reflect increasing member experience impact per day outstanding.
+const WEIGHT_FRESH = 1.0;  // 0–15 days
+const WEIGHT_BAND1 = 1.5;  // 16–30 days — member tolerance exceeded
+const WEIGHT_BAND2 = 3.0;  // 31–45 days — serious readiness issue
+const WEIGHT_BAND3 = 5.5;  // 46+ days — severe readiness issue
+
 export function calculateRepairDrag(input: ERSInput): SignalScore {
   if (input.totalFitnessAssets === 0) {
     return {
       score: 0,
       explanation:
-        "Repair Drag calculated from the percentage of fitness equipment with open repair work orders older than 10 days.",
+        "Repair Drag scored from repair pressure and aging across 15, 30, and 45-day member tolerance thresholds.",
     };
   }
 
-  const dragPercent =
-    input.equipmentWithOpenRepairsOver10Days / input.totalFitnessAssets;
+  // Convert cumulative aging counts to exclusive age bands (avoid double-counting).
+  const freshCount = Math.max(0, input.totalOpenEquipmentRepairs - input.equipmentWithOpenRepairsOver15Days);
+  const band1Count = Math.max(0, input.equipmentWithOpenRepairsOver15Days - input.equipmentWithOpenRepairsOver30Days);
+  const band2Count = Math.max(0, input.equipmentWithOpenRepairsOver30Days - input.equipmentWithOpenRepairsOver45Days);
+  const band3Count = Math.max(0, input.equipmentWithOpenRepairsOver45Days);
 
-  const breakpoints: Array<{ percent: number; score: number }> = [
-    { percent: 0, score: 100 },
-    { percent: 0.01, score: 95 },
-    { percent: 0.02, score: 90 },
-    { percent: 0.03, score: 80 },
-    { percent: 0.05, score: 60 },
-    { percent: 0.07, score: 40 },
-    { percent: 0.1, score: 0 },
+  const weightedOpen =
+    freshCount * WEIGHT_FRESH +
+    band1Count * WEIGHT_BAND1 +
+    band2Count * WEIGHT_BAND2 +
+    band3Count * WEIGHT_BAND3;
+
+  const weightedPressure = weightedOpen / input.totalFitnessAssets;
+
+  // Breakpoints calibrated so that pressure from fresh repairs is penalised less
+  // than the same count of severely aged repairs.
+  const breakpoints: Array<{ p: number; score: number }> = [
+    { p: 0.00, score: 100 },
+    { p: 0.02, score: 97 },
+    { p: 0.05, score: 85 },
+    { p: 0.10, score: 72 },
+    { p: 0.16, score: 55 },
+    { p: 0.24, score: 38 },
+    { p: 0.40, score: 12 },
+    { p: 0.55, score: 0 },
   ];
 
   let score: number;
 
-  if (dragPercent <= breakpoints[0].percent) {
+  if (weightedPressure <= breakpoints[0].p) {
     score = breakpoints[0].score;
-  } else if (dragPercent >= breakpoints[breakpoints.length - 1].percent) {
+  } else if (weightedPressure >= breakpoints[breakpoints.length - 1].p) {
     score = breakpoints[breakpoints.length - 1].score;
   } else {
     score = breakpoints[breakpoints.length - 1].score;
@@ -53,28 +73,21 @@ export function calculateRepairDrag(input: ERSInput): SignalScore {
       const left = breakpoints[i];
       const right = breakpoints[i + 1];
 
-      if (dragPercent >= left.percent && dragPercent <= right.percent) {
-        score = interpolate(
-          dragPercent,
-          left.percent,
-          left.score,
-          right.percent,
-          right.score,
-        );
+      if (weightedPressure >= left.p && weightedPressure <= right.p) {
+        score = interpolate(weightedPressure, left.p, left.score, right.p, right.score);
         break;
       }
     }
   }
 
-  const clampedScore = clamp(score, 0, 100);
-
   return {
-    score: clampedScore,
+    score: clamp(score, 0, 100),
     explanation:
-      "Repair Drag calculated from the percentage of fitness equipment with open repair work orders older than 10 days.",
+      "Repair Drag scored from repair pressure and aging across 15, 30, and 45-day member tolerance thresholds.",
   };
 }
 
 export function calculateRepairDragScore(input: ERSInput): SignalScore {
   return calculateRepairDrag(input);
 }
+

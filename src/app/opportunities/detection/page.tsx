@@ -17,49 +17,72 @@ export default function DetectionOpportunityPage() {
   const workOrdersStarted = ersSignalBundle.input.repairWorkOrdersStarted90Days;
   const pmTouches = ersSignalBundle.input.equipmentPMTouches90Days;
   const memberReportingAvailable = ersSignalBundle.input.equipmentSpecificReporting ? "Available" : "Not Available";
-  const reportingPeriod = ersSignalBundle.reportingContext.reportingPeriod.toLowerCase();
   const {
     workOrdersStartedScore,
     pmCoverageScore,
     memberReportingScore,
   } = getDetectionDriverScores(ersSignalBundle.input);
 
-  const detectionDrivers = [
-    {
-      label: "Work Orders Started",
-      score: workOrdersStartedScore,
-      valueDescription: `${workOrdersStarted} equipment work orders initiated`,
-      weaknessReason:
-        `${workOrdersStarted} equipment work orders were initiated during ${reportingPeriod}, indicating lower issue-identification activity than the other detection drivers`,
-      strengthDescription: `${workOrdersStarted} work orders started`,
-    },
-    {
-      label: "PM Coverage",
-      score: pmCoverageScore,
-      valueDescription: `${pmTouches} preventive maintenance touches across ${totalFitnessAssets} monitored assets`,
-      weaknessReason:
-        `preventive maintenance coverage reflects ${pmTouches} preventive maintenance touches across ${totalFitnessAssets} monitored assets during ${reportingPeriod}, which trails the other detection drivers`,
-      strengthDescription: `${pmTouches} PM touches across ${totalFitnessAssets} assets`,
-    },
-    {
-      label: "Member Reporting",
-      score: memberReportingScore,
-      valueDescription: memberReportingAvailable,
-      weaknessReason:
-        `member reporting is ${memberReportingAvailable.toLowerCase()} during ${reportingPeriod}, reducing frontline issue visibility compared with the other detection drivers`,
-      strengthDescription: memberReportingAvailable,
-    },
-  ];
+  // Rank drivers by weighted points lost (opportunity gap) rather than raw score.
+  const woLost = 50 - workOrdersStartedScore * 0.5;
+  const pmLost = 30 - pmCoverageScore * 0.3;
+  const mrLost = 20 - memberReportingScore * 0.2;
 
-  const sortedDrivers = [...detectionDrivers].sort((left, right) => left.score - right.score);
-  const weakestDriver = sortedDrivers[0];
-  const strongerDrivers = sortedDrivers.slice(1).sort((left, right) => right.score - left.score);
+  const gapOrder = [
+    { key: "wo" as const, lost: woLost },
+    { key: "pm" as const, lost: pmLost },
+    { key: "mr" as const, lost: mrLost },
+  ].sort((a, b) => b.lost - a.lost);
 
-  const executiveSummary =
-    `Detection is ${detectionSignal.status} primarily because ${weakestDriver.label} is the weakest driver ` +
-    `(score ${formatScore(weakestDriver.score)}): ${weakestDriver.weaknessReason}. ` +
-    `${strongerDrivers[0]?.label} (${strongerDrivers[0]?.strengthDescription}) and ${strongerDrivers[1]?.label} ` +
-    `(${strongerDrivers[1]?.strengthDescription}) are stronger supporting drivers that partially offset this weakness but do not eliminate the overall Detection risk.`;
+  const WEAK_THRESHOLD = 8;
+  const weakCount = gapOrder.filter((g) => g.lost > WEAK_THRESHOLD).length;
+  const largestKey = gapOrder[0].key;
+
+  const woPrimary = `Work Order activity is the largest current gap, with only ${workOrdersStarted} equipment work orders started during the last 90 days`;
+  const woSecondary = `Work Order activity is also below target at ${workOrdersStarted} equipment work orders started`;
+  const pmPrimary = `Preventive Maintenance coverage is the largest current gap, with only ${pmTouches} PM touches across ${totalFitnessAssets} assets during the last 90 days`;
+  const pmSecondary = `Preventive Maintenance coverage is also below target at ${pmTouches} PM touches across ${totalFitnessAssets} assets`;
+  const mrClause = memberReportingAvailable === "Available"
+    ? "Member Reporting is available, providing frontline issue visibility"
+    : "Member Reporting is not available";
+
+  function phraseFor(key: "wo" | "pm" | "mr", primary: boolean): string {
+    if (key === "wo") return primary ? woPrimary : woSecondary;
+    if (key === "pm") return primary ? pmPrimary : pmSecondary;
+    return (primary ? mrClause : mrClause.charAt(0).toLowerCase() + mrClause.slice(1));
+  }
+
+  let executiveSummary: string;
+
+  if (weakCount >= 3) {
+    const [first, second, third] = gapOrder;
+    executiveSummary =
+      `Detection is ${detectionSignal.status} because issue-identification activity is weak across all three detection channels. ` +
+      `${phraseFor(first.key, true)}. ` +
+      `${phraseFor(second.key, false)}, and ${phraseFor(third.key, false)}.`;
+  } else if (weakCount === 2) {
+    const weak = gapOrder.filter((g) => g.lost > WEAK_THRESHOLD);
+    const strong = gapOrder.find((g) => g.lost <= WEAK_THRESHOLD)!;
+    const [w1, w2] = weak;
+    const strongLabel = strong.key === "wo"
+      ? `Work Order activity (${workOrdersStarted} work orders started)`
+      : strong.key === "pm"
+        ? `Preventive Maintenance coverage (${pmTouches} PM touches across ${totalFitnessAssets} assets)`
+        : `Member Reporting (${memberReportingAvailable})`;
+    executiveSummary =
+      `Detection is ${detectionSignal.status} because two detection channels have meaningful gaps. ` +
+      `${phraseFor(w1.key, true)}. ` +
+      `${phraseFor(w2.key, false)}. ` +
+      `${strongLabel} is the strongest current detection channel.`;
+  } else {
+    const [primary, ...supporting] = gapOrder;
+    const supportingDesc = supporting
+      .map((g) => phraseFor(g.key, false).charAt(0).toLowerCase() + phraseFor(g.key, false).slice(1))
+      .join(", and ");
+    executiveSummary =
+      `Detection is ${detectionSignal.status} primarily because ${phraseFor(primary.key, true).charAt(0).toLowerCase() + phraseFor(primary.key, true).slice(1)}. ` +
+      `${supportingDesc.charAt(0).toUpperCase() + supportingDesc.slice(1)}.`;
+  }
 
   return (
     <ExecutiveFirstOpportunityLayout
@@ -76,6 +99,7 @@ export default function DetectionOpportunityPage() {
       showEstimatedErsImpact={false}
       showRecommendedActions={false}
       showLearnMore={false}
+      whyItMatters={"The sooner an equipment issue is detected, the sooner it can be repaired — reducing the number of members exposed to unavailable or underperforming equipment.\n\nDetection can come from staff observations, preventive maintenance inspections, or member reporting. Each provides another opportunity to identify a problem before it affects more members."}
       signalHeader={{
         signalName: "Detection",
         currentScore: detectionSignal.score,

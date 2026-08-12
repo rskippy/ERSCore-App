@@ -50,6 +50,7 @@ export default function RepairDragOpportunityPage() {
       showEstimatedErsImpact={false}
       showRecommendedActions={false}
       showLearnMore={false}
+      whyItMatters={"Long-running equipment issues create sustained member exposure.\n\nEven when delays are understandable — such as parts availability, approvals, or vendor scheduling — the member experience remains affected until the equipment is returned to service."}
       signalHeader={{
         signalName: summary.title,
         currentScore: dashboardRepairDragSnapshot.currentScore,

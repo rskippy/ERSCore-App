@@ -1,8 +1,38 @@
+"use client";
+
+import { Suspense, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useDemoScope } from "@/lib/ers/demo-scope/store";
+import type { DemoRole } from "@/lib/ers/demo-scope/types";
 import Image from "next/image";
 
+function RoleRouter() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { setRole } = useDemoScope();
+
+  useEffect(() => {
+    const role = searchParams.get("role") as DemoRole | null;
+    if (role && ["Regional", "Manager"].includes(role)) {
+      setRole(role);
+      if (role === "Manager") {
+        router.push("/dashboard");
+      } else {
+        router.push("/enterprise");
+      }
+    }
+  }, [searchParams, setRole, router]);
+
+  return null;
+}
+
 export default function Home() {
+
   return (
     <main className="min-h-screen bg-[#f7fcfa] text-[#0f2238]">
+      <Suspense fallback={null}>
+        <RoleRouter />
+      </Suspense>
       <section className="mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-6 py-8 sm:px-8 lg:px-12">
         <header className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-[#0f2238]">
           <span className="inline-flex w-[340px] max-w-full shrink-0 items-center justify-start">
@@ -24,12 +54,19 @@ export default function Home() {
                 <p className="mt-5 text-lg leading-8 text-[#4f627d] sm:text-xl">
                   Measure the result of your maintenance program—not just the activities it performs.
                 </p>
-                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+                <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-[#0f766e]">Enter As</p>
+                <div className="mt-4 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
                   <a
-                    href="/dashboard"
+                    href="/enterprise?role=Regional"
                     className="inline-flex items-center justify-center rounded-full bg-[#16a34a] px-8 py-3.5 text-base font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#15803d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16a34a]/35"
                   >
-                    Enter Platform
+                    Regional
+                  </a>
+                  <a
+                    href="/dashboard?role=Manager"
+                    className="inline-flex items-center justify-center rounded-full border border-[#0f766e] bg-white px-8 py-3.5 text-base font-semibold text-[#0f766e] transition hover:bg-[#f2fbf8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0f766e]/35"
+                  >
+                    Manager
                   </a>
                 </div>
               </div>

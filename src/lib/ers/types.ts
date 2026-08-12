@@ -5,7 +5,10 @@ export interface ERSInput {
   equipmentSpecificReporting: boolean;
   averageRecoveryDays: number;
   completedRepairWorkOrders90Days: number;
-  equipmentWithOpenRepairsOver10Days: number;
+  totalOpenEquipmentRepairs: number;
+  equipmentWithOpenRepairsOver15Days: number;
+  equipmentWithOpenRepairsOver30Days: number;
+  equipmentWithOpenRepairsOver45Days: number;
   equipmentWithMoreThan3Repairs90Days: number;
   nps: number;
 }

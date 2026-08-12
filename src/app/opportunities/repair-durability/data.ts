@@ -1,3 +1,4 @@
+import { getLastUpdatedLabel } from "@/lib/ers/reportingDate";
 import type { ScenarioInput } from "@/lib/ers/scenario/types";
 import type { ERSSignalBundle } from "@/lib/ers/signalBundle";
 
@@ -22,9 +23,9 @@ export function createRepairDurabilityOpportunityViewModel(
 
   return {
     header: {
-      organizationLabel: "All Locations",
+      organizationLabel: "",
       reportingPeriod: "Last 90 Days",
-      lastUpdated: "08:30 ET · 23 Jul 2026",
+      lastUpdated: getLastUpdatedLabel(),
     },
     summary: {
       sectionLabel: "Signal",
@@ -52,7 +53,7 @@ export function createRepairDurabilityOpportunityViewModel(
     primaryMetrics: [
       { label: "Repeat Repair Assets", value: String(repeatRepairAssets) },
       { label: "Repeat Repair %", value: formatPercent(repeatRepairPercent) },
-      { label: "Assets with 3+ Repairs (90 Days)", value: String(repeatRepairAssets) },
+      { label: "Assets with 4+ Repairs (90 Days)", value: String(repeatRepairAssets) },
       { label: "Estimated Readiness Impact", value: formatPoints(estimatedImpact) },
     ],
     opportunityRows: [

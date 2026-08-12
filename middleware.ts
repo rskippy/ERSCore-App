@@ -1,14 +1,8 @@
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
 
+// Landing page is now the role entry point. No middleware redirect.
 export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL("/enterprise", request.url));
-  }
-
-  return NextResponse.next();
+  return undefined;
 }
 
-export const config = {
-  matcher: ["/"],
-};
+

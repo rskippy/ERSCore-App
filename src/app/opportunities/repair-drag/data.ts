@@ -1,3 +1,4 @@
+import { getLastUpdatedLabel } from "@/lib/ers/reportingDate";
 import type { ScenarioInput } from "@/lib/ers/scenario/types";
 
 function formatPercent(value: number): string {
@@ -23,9 +24,9 @@ export function createRepairDragOpportunityViewModel(scenarioInput: ScenarioInpu
 
   return {
     header: {
-      organizationLabel: "All Locations",
+      organizationLabel: "",
       reportingPeriod: "Last 90 Days",
-      lastUpdated: "08:30 ET · 23 Jul 2026",
+      lastUpdated: getLastUpdatedLabel(),
     },
     summary: {
       sectionLabel: "Greatest Opportunity",

@@ -14,7 +14,7 @@ export function toErsInput(scenarioInput: ScenarioInput): ERSInput {
     equipmentWithOpenRepairsOver15Days: scenarioInput.olderThan15Days,
     equipmentWithOpenRepairsOver30Days: scenarioInput.olderThan30Days,
     equipmentWithOpenRepairsOver45Days: scenarioInput.olderThan45Days,
-    equipmentWithMoreThan3Repairs90Days: scenarioInput.assetsWith3PlusRepairs,
+    equipmentWith3PlusRepairs90Days: scenarioInput.assetsWith3PlusRepairs,
     nps: FIXED_NPS,
   };
 }

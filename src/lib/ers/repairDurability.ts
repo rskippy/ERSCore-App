@@ -23,12 +23,12 @@ export function calculateRepairDurability(input: ERSInput): SignalScore {
     return {
       score: 0,
       explanation:
-        "Repair Durability calculated from the percentage of fitness equipment with more than three completed repair work orders in the rolling 90-day period.",
+        "Repair Durability calculated from the percentage of fitness equipment with 3 or more completed repair work orders in the rolling 90-day period.",
     };
   }
 
   const repeatRepairPercent =
-    input.equipmentWithMoreThan3Repairs90Days / input.totalFitnessAssets;
+    input.equipmentWith3PlusRepairs90Days / input.totalFitnessAssets;
 
   const breakpoints: Array<{ percent: number; score: number }> = [
     { percent: 0, score: 100 },
@@ -71,7 +71,7 @@ export function calculateRepairDurability(input: ERSInput): SignalScore {
   return {
     score: clampedScore,
     explanation:
-      "Repair Durability calculated from the percentage of fitness equipment with more than three completed repair work orders in the rolling 90-day period.",
+      "Repair Durability calculated from the percentage of fitness equipment with 3 or more completed repair work orders in the rolling 90-day period.",
   };
 }
 

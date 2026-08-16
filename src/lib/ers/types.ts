@@ -9,7 +9,7 @@ export interface ERSInput {
   equipmentWithOpenRepairsOver15Days: number;
   equipmentWithOpenRepairsOver30Days: number;
   equipmentWithOpenRepairsOver45Days: number;
-  equipmentWithMoreThan3Repairs90Days: number;
+  equipmentWith3PlusRepairs90Days: number;
   nps: number;
 }
 

@@ -193,7 +193,7 @@ function createOpportunityContent(
       };
     case "Repair Durability":
       return {
-        primaryDriver: `${scenarioInput.assetsWith3PlusRepairs} monitored assets have 4 or more repairs in the last 90 days.`,
+        primaryDriver: `${scenarioInput.assetsWith3PlusRepairs} monitored assets have 3 or more repairs in the last 90 days.`,
         supportingDriver: `${scenarioInput.totalMonitoredAssets} total monitored assets are included in this repeat-repair rate.`,
         recommendedAction:
           "Prioritize recurring-failure assets for root-cause correction and validate durable fixes before returning them to normal service.",

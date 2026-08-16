@@ -72,7 +72,7 @@ export function validateScenarioInput(input: ScenarioInput): ScenarioValidationR
   if (input.assetsWith3PlusRepairs > input.totalMonitoredAssets) {
     return {
       isValid: false,
-      error: "Assets with 4+ Repairs cannot exceed Total Monitored Assets.",
+      error: "Assets with 3+ Repairs cannot exceed Total Monitored Assets.",
     };
   }
 

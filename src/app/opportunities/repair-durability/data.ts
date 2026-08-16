@@ -53,7 +53,7 @@ export function createRepairDurabilityOpportunityViewModel(
     primaryMetrics: [
       { label: "Repeat Repair Assets", value: String(repeatRepairAssets) },
       { label: "Repeat Repair %", value: formatPercent(repeatRepairPercent) },
-      { label: "Assets with 4+ Repairs (90 Days)", value: String(repeatRepairAssets) },
+      { label: "Assets with 3+ Repairs (90 Days)", value: String(repeatRepairAssets) },
       { label: "Estimated Readiness Impact", value: formatPoints(estimatedImpact) },
     ],
     opportunityRows: [

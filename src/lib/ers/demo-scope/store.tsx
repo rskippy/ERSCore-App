@@ -6,8 +6,8 @@ import type { DemoRole, DemoScopeState } from "./types";
 // Temporary role entry source. Replace with authenticated FitnessEMS user and location scope in production.
 
 /**
- * For local testing only, deterministically assigns locations based on selected role.
- * Regional: approximately 50% of currently loaded locations
+ * For local testing only, assigns location scope based on selected role.
+ * Regional: all currently loaded locations
  * Manager: first location only
  */
 function getVisibleLocations(

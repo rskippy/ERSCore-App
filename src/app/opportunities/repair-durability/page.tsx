@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function RepairDurabilityOpportunityPage() {
   const { ersSignalBundle } = useScenarioStore();
   const repairDurabilitySignal = ersSignalBundle.signals.repairDurability;
-  const repeatRepairAssets = ersSignalBundle.input.equipmentWithMoreThan3Repairs90Days;
+  const repeatRepairAssets = ersSignalBundle.input.equipmentWith3PlusRepairs90Days;
   const totalFitnessAssets = ersSignalBundle.input.totalFitnessAssets;
   const repeatRepairShare =
     totalFitnessAssets > 0 ? Math.round((repeatRepairAssets / totalFitnessAssets) * 1000) / 10 : 0;
@@ -70,7 +70,7 @@ export default function RepairDurabilityOpportunityPage() {
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="rounded-[24px] border border-[#dcebe6] bg-white p-6 transition hover:border-[#c8e8de] hover:shadow-[0_16px_38px_-30px_rgba(15,34,56,0.24)]">
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#4f627d]">
-                  Assets with 4+ Repairs
+                  Assets with 3+ Repairs
                 </p>
                 <p className="mt-3 text-3xl font-semibold text-[#0f2238]">{repeatRepairAssets}</p>
               </div>

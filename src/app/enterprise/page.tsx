@@ -86,7 +86,7 @@ export default function EnterpriseDashboardPage() {
     [locationScenarioInputs, visibleLocations],
   );
 
-  const { summary } = enterpriseViewModel;
+  const { summary, scoreDrag } = enterpriseViewModel;
 
   // Derive organizational opportunity from existing location results — no new scoring logic
   const orgOpportunity = useMemo(() => {
@@ -104,6 +104,49 @@ export default function EnterpriseDashboardPage() {
       distribution: sorted.map(([signal, count]) => ({ signal, count })),
     };
   }, [enterpriseViewModel]);
+
+  const executiveSummary = useMemo(() => {
+    const ERS_BENCHMARK = 69.78;
+    const diff = Math.round((summary.organizationErs - ERS_BENCHMARK) * 100) / 100;
+    const absDiff = Math.abs(diff);
+
+    let benchmarkClause: string;
+    if (absDiff < 0.05) {
+      benchmarkClause = "performing in line with the ERS Benchmark";
+    } else if (diff > 0) {
+      benchmarkClause = `performing ${absDiff.toFixed(2)} points above the ERS Benchmark`;
+    } else {
+      benchmarkClause = `performing ${absDiff.toFixed(2)} points below the ERS Benchmark`;
+    }
+
+    const locWord = (n: number) => (n === 1 ? "location" : "locations");
+
+    const opportunityClause = orgOpportunity
+      ? `${orgOpportunity.signal} is the most widespread improvement opportunity, affecting ${orgOpportunity.count} of ${orgOpportunity.total} ${locWord(orgOpportunity.total)}`
+      : null;
+
+    let dragClause: string | null = null;
+    if (scoreDrag) {
+      const allStrongOrBetter = scoreDrag.signals.every((s) => s.orgAvgScore >= 80);
+      if (allStrongOrBetter) {
+        dragClause = "all four signals are currently performing well across the organization";
+      } else if (scoreDrag.headline === "Broad-Based Pressure") {
+        const weakNames = scoreDrag.signals
+          .filter((s) => s.orgAvgScore < 70)
+          .map((s) => s.name);
+        const last = weakNames[weakNames.length - 1];
+        const rest = weakNames.slice(0, -1);
+        dragClause = `weighted readiness pressure is broad-based across ${rest.join(", ")} and ${last}`;
+      } else if (scoreDrag.headline.includes(" & ")) {
+        const parts = scoreDrag.headline.split(" & ");
+        dragClause = `${parts[0]} and ${parts[1]} are creating the greatest weighted pressure on overall readiness`;
+      } else {
+        dragClause = `${scoreDrag.primarySignal} is creating the greatest weighted pressure on overall readiness`;
+      }
+    }
+
+    return { benchmarkClause, opportunityClause, dragClause };
+  }, [summary.organizationErs, orgOpportunity, scoreDrag]);
 
   function openLocationDashboard(locationName: ScenarioLocation) {
     setSelectedLocation(locationName);
@@ -143,8 +186,11 @@ export default function EnterpriseDashboardPage() {
         {/* HOW ARE WE DOING + WHERE IS THE OPPORTUNITY */}
         <div className="mt-5 grid gap-5 lg:grid-cols-[1.45fr_0.85fr]">
 
+          {/* Left column: Organization ERS + Executive Summary */}
+          <div className="flex flex-col gap-5">
+
           {/* Organization ERS hero */}
-          <section className="rounded-[36px] border border-[#dcebe6] bg-[#0f2238] p-6 text-white shadow-[0_30px_90px_-38px_rgba(15,34,56,0.55)] sm:p-7 lg:self-start lg:p-8">
+          <section className="rounded-[36px] border border-[#dcebe6] bg-[#0f2238] p-6 text-white shadow-[0_30px_90px_-38px_rgba(15,34,56,0.55)] sm:p-7 lg:p-8">
             <div className="space-y-6">
               <div className="max-w-xl">
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#7dd3c0]">
@@ -194,6 +240,27 @@ export default function EnterpriseDashboardPage() {
               </div>
             </div>
           </section>
+
+          {/* Executive Summary */}
+          <section className="flex-1 rounded-[32px] border border-[#dcebe6] bg-white p-6 shadow-[0_25px_70px_-38px_rgba(15,34,56,0.3)] sm:p-7">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#0f766e]">Executive Summary</p>
+            <p className="mt-4 text-base leading-7 text-[#0f2238]">
+              Regional readiness is{" "}
+              <span className="font-semibold">{summary.organizationErs}</span>,{" "}
+              {executiveSummary.benchmarkClause}.
+              {executiveSummary.opportunityClause ? (
+                <>
+                  {" "}
+                  {executiveSummary.dragClause
+                    ? <>{executiveSummary.opportunityClause}, while {executiveSummary.dragClause}.</>
+                    : <>{executiveSummary.opportunityClause}.</>
+                  }
+                </>
+              ) : null}
+            </p>
+          </section>
+
+          </div>{/* end left column */}
 
           {/* Greatest Organizational Opportunity */}
           {orgOpportunity ? (
@@ -248,6 +315,37 @@ export default function EnterpriseDashboardPage() {
             </aside>
           ) : null}
         </div>
+
+        {/* WHAT'S DRAGGING THE SCORE */}
+        {scoreDrag ? (
+          <section className="mt-5 rounded-[32px] border border-[#e8d5d5] bg-white p-6 shadow-[0_25px_70px_-38px_rgba(15,34,56,0.3)] [border-left:3px_solid_#9b3a3a] sm:p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#9b3a3a]">
+              What&apos;s Dragging the Score
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold text-[#0f2238]">{scoreDrag.headline}</h2>
+            <p className="mt-4 text-base leading-7 text-[#4f627d]">{scoreDrag.detail}</p>
+            <div className="mt-5 rounded-[24px] border border-[#e8d5d5] bg-[#fdf6f6] p-5">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#4f627d]">Weighted ERS Loss by Signal</p>
+              <div className="mt-3 space-y-3">
+                {scoreDrag.signals.map((signal) => (
+                  <div key={signal.name} className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-3">
+                      <span className={signal.name === scoreDrag.primarySignal ? "font-semibold text-[#0f2238]" : "text-[#4f627d]"}>
+                        {signal.name}
+                      </span>
+                      <span className="text-xs text-[#4f627d]">
+                        {signal.orgAvgStatus} &middot; {signal.orgAvgScore}
+                      </span>
+                    </div>
+                    <span className={signal.name === scoreDrag.primarySignal ? "font-semibold text-[#9b3a3a]" : "text-[#4f627d]"}>
+                      {signal.weightedLoss} pts
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         {/* WHERE SHOULD I LOOK — ranked location detail */}
         <section className="mt-5 rounded-[32px] border border-[#dcebe6] bg-white p-6 shadow-[0_25px_70px_-38px_rgba(15,34,56,0.3)] sm:p-8">

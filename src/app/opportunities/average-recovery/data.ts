@@ -16,7 +16,7 @@ function getRecoveryStatus(daysToClose: number): string {
     equipmentWithOpenRepairsOver15Days: 0,
     equipmentWithOpenRepairsOver30Days: 0,
     equipmentWithOpenRepairsOver45Days: 0,
-    equipmentWithMoreThan3Repairs90Days: 0,
+    equipmentWith3PlusRepairs90Days: 0,
     nps: 0,
   };
 

@@ -158,8 +158,8 @@ function processRows(rows: unknown[][]): ExcelImportResult {
     const totalAssets = requireNumeric(row[10], "Total Monitored Assets", rowNum);
     if ("error" in totalAssets) return { success: false, error: totalAssets.error };
 
-    // Column 11: Assets with 4+ Repairs
-    const assets3Plus = requireNumeric(row[11], "Assets with 4+ Repairs", rowNum);
+    // Column 11: Assets with 3+ Repairs
+    const assets3Plus = requireNumeric(row[11], "Assets with 3+ Repairs", rowNum);
     if ("error" in assets3Plus) return { success: false, error: assets3Plus.error };
 
     locations.push({

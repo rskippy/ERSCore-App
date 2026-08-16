@@ -338,7 +338,7 @@ export default function ScenarioBuilderPage() {
                   onChange={(raw) => commitCountField("totalMonitoredAssets", raw)}
                 />
                 <Field
-                  label="Assets with 4+ Repairs"
+                  label="Assets with 3+ Repairs"
                   value={scenarioInput.assetsWith3PlusRepairs}
                   max={scenarioInput.totalMonitoredAssets}
                   onChange={(raw) => commitCountField("assetsWith3PlusRepairs", raw)}

@@ -9,6 +9,12 @@ import {
   resetScenarioStoreForTests,
   useScenarioStore,
 } from "./store";
+import { DEFAULT_LOCATION_DATASET } from "./defaults";
+
+const FIRST_LOCATION = DEFAULT_LOCATION_DATASET[0].name;
+const SECOND_LOCATION = DEFAULT_LOCATION_DATASET[1].name;
+const FIRST_WORK_ORDERS = String(DEFAULT_LOCATION_DATASET[0].input.workOrdersStarted);
+const SECOND_WORK_ORDERS = String(DEFAULT_LOCATION_DATASET[1].input.workOrdersStarted);
 
 function ScenarioBuilderHarness() {
   const { scenarioInput, updateScenarioInput } = useScenarioStore();
@@ -69,12 +75,12 @@ function LocationIsolationHarness() {
     createElement(
       "p",
       { id: "location-1-work-orders" },
-      String(locationScenarioInputs["Location 1"].workOrdersStarted),
+      String(locationScenarioInputs[FIRST_LOCATION].workOrdersStarted),
     ),
     createElement(
       "p",
       { id: "location-2-work-orders" },
-      String(locationScenarioInputs["Location 2"].workOrdersStarted),
+      String(locationScenarioInputs[SECOND_LOCATION].workOrdersStarted),
     ),
     createElement(
       "button",
@@ -82,10 +88,10 @@ function LocationIsolationHarness() {
         type: "button",
         id: "select-location-1",
         onClick: () => {
-          setSelectedLocation("Location 1");
+          setSelectedLocation(FIRST_LOCATION);
         },
       },
-      "Location 1",
+      FIRST_LOCATION,
     ),
     createElement(
       "button",
@@ -93,10 +99,10 @@ function LocationIsolationHarness() {
         type: "button",
         id: "select-location-2",
         onClick: () => {
-          setSelectedLocation("Location 2");
+          setSelectedLocation(SECOND_LOCATION);
         },
       },
-      "Location 2",
+      SECOND_LOCATION,
     ),
     createElement(
       "button",
@@ -155,15 +161,9 @@ afterEach(() => {
 });
 
 describe("scenario state persistence across navigation", () => {
-  test("provides six enterprise sample locations", () => {
-    expect(ERS_LOCATIONS).toEqual([
-      "Location 1",
-      "Location 2",
-      "Location 3",
-      "Location 4",
-      "Location 5",
-      "Location 6",
-    ]);
+  test("provides the default seventeen-location portfolio", () => {
+    expect(ERS_LOCATIONS).toEqual(DEFAULT_LOCATION_DATASET.map((location) => location.name));
+    expect(ERS_LOCATIONS).toHaveLength(17);
   });
 
   test("scenario builder updates are reflected on dashboard after provider remount", () => {
@@ -220,23 +220,23 @@ describe("scenario state persistence across navigation", () => {
       root.render(createElement(LocationIsolationApp));
     });
 
-    expect(document.getElementById("selected-location")?.textContent).toBe("Location 1");
-    expect(document.getElementById("active-work-orders")?.textContent).toBe("4");
-    expect(document.getElementById("location-1-work-orders")?.textContent).toBe("4");
-    expect(document.getElementById("location-2-work-orders")?.textContent).toBe("18");
+    expect(document.getElementById("selected-location")?.textContent).toBe(FIRST_LOCATION);
+    expect(document.getElementById("active-work-orders")?.textContent).toBe(FIRST_WORK_ORDERS);
+    expect(document.getElementById("location-1-work-orders")?.textContent).toBe(FIRST_WORK_ORDERS);
+    expect(document.getElementById("location-2-work-orders")?.textContent).toBe(SECOND_WORK_ORDERS);
 
     clickById("update-active-work-orders-21");
 
     expect(document.getElementById("active-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("active-input-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("location-1-work-orders")?.textContent).toBe("21");
-    expect(document.getElementById("location-2-work-orders")?.textContent).toBe("18");
+    expect(document.getElementById("location-2-work-orders")?.textContent).toBe(SECOND_WORK_ORDERS);
 
     clickById("select-location-2");
 
-    expect(document.getElementById("selected-location")?.textContent).toBe("Location 2");
-    expect(document.getElementById("active-work-orders")?.textContent).toBe("18");
-    expect(document.getElementById("active-input-work-orders")?.textContent).toBe("18");
+    expect(document.getElementById("selected-location")?.textContent).toBe(SECOND_LOCATION);
+    expect(document.getElementById("active-work-orders")?.textContent).toBe(SECOND_WORK_ORDERS);
+    expect(document.getElementById("active-input-work-orders")?.textContent).toBe(SECOND_WORK_ORDERS);
 
     clickById("update-active-work-orders-9");
 
@@ -247,7 +247,7 @@ describe("scenario state persistence across navigation", () => {
 
     clickById("select-location-1");
 
-    expect(document.getElementById("selected-location")?.textContent).toBe("Location 1");
+    expect(document.getElementById("selected-location")?.textContent).toBe(FIRST_LOCATION);
     expect(document.getElementById("active-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("active-input-work-orders")?.textContent).toBe("21");
 
@@ -281,7 +281,7 @@ describe("scenario state persistence across navigation", () => {
       remountRoot.render(createElement(LocationIsolationApp));
     });
 
-    expect(document.getElementById("selected-location")?.textContent).toBe("Location 2");
+    expect(document.getElementById("selected-location")?.textContent).toBe(SECOND_LOCATION);
     expect(document.getElementById("location-1-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("location-2-work-orders")?.textContent).toBe("9");
     expect(document.getElementById("active-work-orders")?.textContent).toBe("9");
@@ -308,15 +308,15 @@ describe("scenario state persistence across navigation", () => {
 
     clickById("update-active-work-orders-21");
 
-    expect(document.getElementById("selected-location")?.textContent).toBe("Location 1");
+    expect(document.getElementById("selected-location")?.textContent).toBe(FIRST_LOCATION);
     expect(document.getElementById("active-work-orders")?.textContent).toBe("21");
     expect(document.getElementById("active-input-work-orders")?.textContent).toBe("21");
 
     clickById("select-location-2");
 
-    expect(document.getElementById("selected-location")?.textContent).toBe("Location 2");
-    expect(document.getElementById("active-work-orders")?.textContent).toBe("18");
-    expect(document.getElementById("active-input-work-orders")?.textContent).toBe("18");
+    expect(document.getElementById("selected-location")?.textContent).toBe(SECOND_LOCATION);
+    expect(document.getElementById("active-work-orders")?.textContent).toBe(SECOND_WORK_ORDERS);
+    expect(document.getElementById("active-input-work-orders")?.textContent).toBe(SECOND_WORK_ORDERS);
 
     act(() => {
       root.unmount();

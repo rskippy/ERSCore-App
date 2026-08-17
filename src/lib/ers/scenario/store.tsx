@@ -3,19 +3,12 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ERSSignalBundle } from "@/lib/ers/signalBundle";
 import type { ScenarioInput } from "./types";
-import { defaultScenarioInput } from "./defaults";
+import { DEFAULT_LOCATION_DATASET, defaultScenarioInput } from "./defaults";
 import { createScenarioSignalBundle } from "./selectors";
 import { toErsInput } from "./adapter";
 import { validateScenarioPatch } from "./validation";
 
-export const ERS_LOCATIONS = [
-  "Location 1",
-  "Location 2",
-  "Location 3",
-  "Location 4",
-  "Location 5",
-  "Location 6",
-] as const;
+export const ERS_LOCATIONS: readonly string[] = DEFAULT_LOCATION_DATASET.map((location) => location.name);
 
 export type ScenarioLocation = string;
 
@@ -60,81 +53,16 @@ function writeImportedSnapshot(state: PersistedScenarioState): void {
 }
 
 function buildDefaultLocationScenarioInputs(): Record<string, ScenarioInput> {
-  return {
-    "Location 1": { ...defaultScenarioInput },
-    "Location 2": {
-      totalMonitoredAssets: 165,
-      workOrdersStarted: 18,
-      preventiveMaintenanceTouches: 150,
-      memberReportingAvailable: false,
-      averageDaysToClose: 28,
-      completedEquipmentWorkOrders: 31,
-      totalOpenEquipmentWorkOrders: 112,
-      olderThan15Days: 26,
-      olderThan30Days: 14,
-      olderThan45Days: 6,
-      assetsWith3PlusRepairs: 18,
-    },
-    "Location 3": {
-      totalMonitoredAssets: 140,
-      workOrdersStarted: 7,
-      preventiveMaintenanceTouches: 220,
-      memberReportingAvailable: true,
-      averageDaysToClose: 12,
-      completedEquipmentWorkOrders: 44,
-      totalOpenEquipmentWorkOrders: 64,
-      olderThan15Days: 9,
-      olderThan30Days: 4,
-      olderThan45Days: 1,
-      assetsWith3PlusRepairs: 6,
-    },
-    "Location 4": {
-      totalMonitoredAssets: 180,
-      workOrdersStarted: 24,
-      preventiveMaintenanceTouches: 130,
-      memberReportingAvailable: false,
-      averageDaysToClose: 34,
-      completedEquipmentWorkOrders: 22,
-      totalOpenEquipmentWorkOrders: 140,
-      olderThan15Days: 40,
-      olderThan30Days: 22,
-      olderThan45Days: 11,
-      assetsWith3PlusRepairs: 27,
-    },
-    "Location 5": {
-      totalMonitoredAssets: 155,
-      workOrdersStarted: 11,
-      preventiveMaintenanceTouches: 175,
-      memberReportingAvailable: true,
-      averageDaysToClose: 18,
-      completedEquipmentWorkOrders: 36,
-      totalOpenEquipmentWorkOrders: 88,
-      olderThan15Days: 12,
-      olderThan30Days: 6,
-      olderThan45Days: 2,
-      assetsWith3PlusRepairs: 12,
-    },
-    "Location 6": {
-      totalMonitoredAssets: 170,
-      workOrdersStarted: 15,
-      preventiveMaintenanceTouches: 160,
-      memberReportingAvailable: false,
-      averageDaysToClose: 25,
-      completedEquipmentWorkOrders: 28,
-      totalOpenEquipmentWorkOrders: 97,
-      olderThan15Days: 20,
-      olderThan30Days: 11,
-      olderThan45Days: 5,
-      assetsWith3PlusRepairs: 16,
-    },
-  };
+  return Object.fromEntries(
+    DEFAULT_LOCATION_DATASET.map((location) => [location.name, { ...location.input }]),
+  );
 }
 
 function buildDefaultScenarioState(): PersistedScenarioState {
   // Always start with defaults so server HTML and client initial render match (no hydration mismatch).
   // sessionStorage is applied after mount via useEffect in ScenarioStoreProvider.
   return {
-    selectedLocation: "Location 1",
+    selectedLocation: DEFAULT_LOCATION_DATASET[0].name,
     locations: ERS_LOCATIONS,
     locationScenarioInputs: buildDefaultLocationScenarioInputs(),
   };

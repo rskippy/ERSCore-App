@@ -23,7 +23,7 @@ const SIGNAL_GUIDANCE: Record<SignalName, { meaning: string; steps: readonly str
   },
   Detection: {
     meaning:
-      "How effectively the operation identifies equipment issues before they remain unnoticed by members.",
+      "How effectively the operation identifies equipment issues before members encounter them.",
     steps: [
       "Increase preventive maintenance equipment touches",
       "Improve staff and member issue reporting",
